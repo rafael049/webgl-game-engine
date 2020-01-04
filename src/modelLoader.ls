@@ -12,7 +12,7 @@ window.loadOBJfile = (path) ->
 
     return result
 
-window.getMesh = (name) ->
+window.loadMesh = (name) ->
     data = {}
 
     data.vertex = []
@@ -51,7 +51,7 @@ window.getMesh = (name) ->
         if prefix == "vt"
             _texCoord = _texCoord.concat(
                 [ parseFloat(elements[1])
-                , parseFloat(elements[2])
+                , 1 -parseFloat(elements[2])
                 ]
             )
         # Indexes (vertex, texCoord and normal)

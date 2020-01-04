@@ -1,12 +1,16 @@
 class window.Mesh
-    (gl)->
+    (gl, name)->
         @gl = gl
-        @posBuffer = @newPosBuffer!
-        @indexBuffer = @newIndexBuffer!
-        @colorBuffer = @newColorBuffer!
+
+        data = loadMesh(name)
+
+        @numVertices = data.numVertices
+        @posBuffer = @newPosBuffer data
+        @indexBuffer = @newIndexBuffer data
+        @texCoordBuffer = @newTexCoordBuffer data
 
 
-    render: (shader) !->
+    render: (shader, texture) !->
         vertexPosition = shader.getAttribLocation "aVertexPosition"
         @gl.bindBuffer @gl.ARRAY_BUFFER, @posBuffer
         @gl.vertexAttribPointer(
@@ -19,67 +23,31 @@ class window.Mesh
         )
         @gl.enableVertexAttribArray vertexPosition
 
-        vertexColor = shader.getAttribLocation "aVertexColor" 
-        @gl.bindBuffer @gl.ARRAY_BUFFER, @colorBuffer
+        texCoord = shader.getAttribLocation "aTexCoord"
+        @gl.bindBuffer @gl.ARRAY_BUFFER, @texCoordBuffer
         @gl.vertexAttribPointer(
-            vertexColor,
-            3,
+            texCoord,
+            2,
             @gl.FLOAT,
             false,
             0,
             0
         )
-        @gl.enableVertexAttribArray vertexColor
+
+        @gl.enableVertexAttribArray texCoord
 
         shader.use!
 
-        @gl.bindBuffer @gl.ELEMENT_ARRAY_BUFFER, @indexBuffer
+        #@gl.bindBuffer @gl.ELEMENT_ARRAY_BUFFER, @indexBuffer
 
-        @gl.drawElements(
+        @gl.drawArrays(
             @gl.TRIANGLES,
-            36,
-            @gl.UNSIGNED_SHORT,
-            0
+            0,
+            @numVertices
         )
 
-    newPosBuffer: ->
-        vertices = [
-            # Front face
-            -1.0, -1.0,  1.0,
-             1.0, -1.0,  1.0,
-             1.0,  1.0,  1.0,
-            -1.0,  1.0,  1.0,
-
-            # Back face
-            -1.0, -1.0, -1.0,
-            -1.0,  1.0, -1.0,
-             1.0,  1.0, -1.0,
-             1.0, -1.0, -1.0,
-
-            # Top face
-            -1.0,  1.0, -1.0,
-            -1.0,  1.0,  1.0,
-             1.0,  1.0,  1.0,
-             1.0,  1.0, -1.0,
-
-            # Bottom face
-            -1.0, -1.0, -1.0,
-             1.0, -1.0, -1.0,
-             1.0, -1.0,  1.0,
-            -1.0, -1.0,  1.0,
-
-            # Right face
-             1.0, -1.0, -1.0,
-             1.0,  1.0, -1.0,
-             1.0,  1.0,  1.0,
-             1.0, -1.0,  1.0,
-
-            # Left face
-            -1.0, -1.0, -1.0,
-            -1.0, -1.0,  1.0,
-            -1.0,  1.0,  1.0,
-            -1.0,  1.0, -1.0,
-        ]
+    newPosBuffer: (data) ->
+        vertices = data.vertex
 
         posBuffer = @gl.createBuffer!
         @gl.bindBuffer @gl.ARRAY_BUFFER, posBuffer
@@ -90,15 +58,8 @@ class window.Mesh
 
         posBuffer
 
-    newIndexBuffer: ->
-        indices = [
-            0,  1,  2,      0,  2,  3,    # front
-            4,  5,  6,      4,  6,  7,    # back
-            8,  9,  10,     8,  10, 11,   # top
-            12, 13, 14,     12, 14, 15,   # bottom
-            16, 17, 18,     16, 18, 19,   # right
-            20, 21, 22,     20, 22, 23,   # left
-        ]
+    newIndexBuffer: (data) ->
+        indices = data.vertexIndex
 
         indexBuffer = @gl.createBuffer!
         @gl.bindBuffer @gl.ELEMENT_ARRAY_BUFFER, indexBuffer
@@ -110,35 +71,15 @@ class window.Mesh
 
         indexBuffer
 
-    newColorBuffer: ->
-        colors = [
-            1.0,  1.0,  1.0,  1.0,    # white
-            1.0,  0.0,  0.0,  1.0,    # red
-            0.0,  1.0,  0.0,  1.0,    # green
-            0.0,  0.0,  1.0,  1.0,    # blue
-            1.0,  1.0,  1.0,  1.0,    # white
-            1.0,  0.0,  0.0,  1.0,    # red
-            0.0,  1.0,  0.0,  1.0,    # green
-            0.0,  0.0,  1.0,  1.0,    # blue
-            1.0,  1.0,  1.0,  1.0,    # white
-            1.0,  0.0,  0.0,  1.0,    # red
-            0.0,  1.0,  0.0,  1.0,    # green
-            0.0,  0.0,  1.0,  1.0,    # blue
-            1.0,  1.0,  1.0,  1.0,    # white
-            1.0,  0.0,  0.0,  1.0,    # red
-            0.0,  1.0,  0.0,  1.0,    # green
-            0.0,  0.0,  1.0,  1.0,    # blue
-            1.0,  1.0,  1.0,  1.0,    # white
-            1.0,  0.0,  0.0,  1.0,    # red
-            0.0,  1.0,  0.0,  1.0,    # green
-            0.0,  0.0,  1.0,  1.0,    # blue
-        ];
-        colorBuffer = @gl.createBuffer!
-        @gl.bindBuffer @gl.ARRAY_BUFFER, colorBuffer
+    newTexCoordBuffer: (data) ->
+        textureCoordinates = data.texCoord
+
+        texCoordBuffer = @gl.createBuffer!
+        @gl.bindBuffer @gl.ARRAY_BUFFER, texCoordBuffer
         @gl.bufferData(
             @gl.ARRAY_BUFFER,
-            new Float32Array(colors),
+            new Float32Array(textureCoordinates),
             @gl.STATIC_DRAW
         )
 
-        colorBuffer
+        texCoordBuffer

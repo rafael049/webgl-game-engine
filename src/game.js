@@ -9,33 +9,18 @@
       this.canvas = document.getElementById("canvas");
       this.screenWidth = canvas.width;
       this.screenHeight = canvas.height;
-      this.gl = canvas.getContext("webgl");
+      this.gl = canvas.getContext("webgl2");
       this.gl.viewportWidth = canvas.width;
       this.gl.viewportHeight = canvas.height;
-      console.log("tudo show");
     }
     Game.prototype.start = function(){
-      this.input = new Input;
-      this.object = new GameObject(this.gl);
-      this.object.setPosition([0.0, 0.0, -6.0]);
-      return this.camera = new Camera(this.gl);
+      return this.scene1 = new Scene(this.gl);
     };
     Game.prototype.render = function(){
-      var projectionMatrix, viewMatrix;
-      this.gl.clearColor(0.0, 0.1, 0.1, 1.0);
-      this.gl.clearDepth(1.0);
-      this.gl.enable(this.gl.DEPTH_TEST);
-      this.gl.depthFunc(this.gl.LEQUAL);
-      this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-      projectionMatrix = this.camera.getProjectionMatrix();
-      viewMatrix = this.camera.getViewMatrix();
-      this.object.render(viewMatrix, projectionMatrix);
+      this.scene1.render();
     };
     Game.prototype.update = function(){
-      this.camera.update();
-      if (Input.keys[37]) {
-        return this.object.rot[1] += 0.01;
-      }
+      return this.scene1.update();
     };
     return Game;
   }());

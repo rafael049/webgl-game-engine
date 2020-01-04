@@ -5,7 +5,7 @@
   window.Shader = Shader = (function(){
     Shader.displayName = 'Shader';
     var loadTextFile, prototype = Shader.prototype, constructor = Shader;
-    function Shader(name, gl){
+    function Shader(gl, name){
       this.gl = gl;
       this.vertexShader = this.createShader(name.concat(".vs"));
       this.fragShader = this.createShader(name.concat(".fs"));
@@ -69,6 +69,9 @@
     };
     Shader.prototype.setProjection = function(mat){
       this.gl.uniformMatrix4fv(this.getUniformLocation("uProjectionMat"), false, mat);
+    };
+    Shader.prototype.setTexture = function(id){
+      return this.gl.uniform1i(this.getUniformLocation("uTexture"), id);
     };
     loadTextFile = function(path){
       var result, xmlhttp;

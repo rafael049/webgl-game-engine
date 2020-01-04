@@ -1,7 +1,7 @@
 prelude = require "prelude-ls"
 
 class window.Shader
-    (name, gl) ->
+    (gl, name) ->
         @gl = gl
         @vertexShader = @createShader (name ++ ".vs")
         @fragShader = @createShader (name ++ ".fs")
@@ -83,6 +83,12 @@ class window.Shader
             @getUniformLocation("uProjectionMat"),
             false,
             mat
+        )
+
+    setTexture: (id) ->
+        @gl.uniform1i(
+            @getUniformLocation("uTexture"),
+            id
         )
 
     loadTextFile = (path) ->

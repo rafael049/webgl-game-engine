@@ -1,18 +1,16 @@
 class window.GameObject
     (gl) ->
+        @name = "no_name"
         @gl = gl
 
         @pos = vec3.create!
         @rot = vec3.create!
-        @sca = vec3.create!
+        @sca = vec3.fromValues(1, 1, 1)
 
         @vel = vec3.create!
 
         @localMat = mat4.create!
         @modelViewMat = mat4.create!
-
-        @shader = new Shader("default", gl)
-        @mesh = new Mesh(gl)
 
     render: (viewMatrix, projectionMatrix) ->
 
@@ -24,6 +22,11 @@ class window.GameObject
         )
 
         localMatrix = mat4.create!
+        mat4.scale(
+            localMatrix,
+            localMatrix,
+            @sca
+        )
         mat4.rotateX(
             localMatrix,
             localMatrix,
@@ -40,15 +43,28 @@ class window.GameObject
             @rot[2]
         )
 
+        # Texture
+        @gl.activeTexture(@gl.TEXTURE0)
+        @texture.use!
+
+        @shader.setTexture @texture.id
+
         @shader.setProjection projectionMatrix
         @shader.setView viewMatrix
         @shader.setModel modelMatrix
         @shader.setLocal localMatrix
         @shader.use!
 
-        @mesh.render @shader
+        @mesh.render @shader, @texture
+
+    update: (pos) !->
+        console.log "Error: Game Object #{@name} do not implement update function!"
+
     setPosition: (pos) !->
         @pos = pos
+
+    setScale: (scale) !->
+        @sca = scale
 
     setRotationX: (angle) !->
         @rot[0] = angle

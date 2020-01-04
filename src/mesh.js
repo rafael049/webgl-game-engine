@@ -4,49 +4,51 @@
   window.Mesh = Mesh = (function(){
     Mesh.displayName = 'Mesh';
     var prototype = Mesh.prototype, constructor = Mesh;
-    function Mesh(gl){
+    function Mesh(gl, name){
+      var data;
       this.gl = gl;
-      this.posBuffer = this.newPosBuffer();
-      this.indexBuffer = this.newIndexBuffer();
-      this.colorBuffer = this.newColorBuffer();
+      data = loadMesh(name);
+      this.numVertices = data.numVertices;
+      this.posBuffer = this.newPosBuffer(data);
+      this.indexBuffer = this.newIndexBuffer(data);
+      this.texCoordBuffer = this.newTexCoordBuffer(data);
     }
-    Mesh.prototype.render = function(shader){
-      var vertexPosition, vertexColor;
+    Mesh.prototype.render = function(shader, texture){
+      var vertexPosition, texCoord;
       vertexPosition = shader.getAttribLocation("aVertexPosition");
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.posBuffer);
       this.gl.vertexAttribPointer(vertexPosition, 3, this.gl.FLOAT, false, 0, 0);
       this.gl.enableVertexAttribArray(vertexPosition);
-      vertexColor = shader.getAttribLocation("aVertexColor");
-      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorBuffer);
-      this.gl.vertexAttribPointer(vertexColor, 3, this.gl.FLOAT, false, 0, 0);
-      this.gl.enableVertexAttribArray(vertexColor);
+      texCoord = shader.getAttribLocation("aTexCoord");
+      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.texCoordBuffer);
+      this.gl.vertexAttribPointer(texCoord, 2, this.gl.FLOAT, false, 0, 0);
+      this.gl.enableVertexAttribArray(texCoord);
       shader.use();
-      this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
-      this.gl.drawElements(this.gl.TRIANGLES, 36, this.gl.UNSIGNED_SHORT, 0);
+      this.gl.drawArrays(this.gl.TRIANGLES, 0, this.numVertices);
     };
-    Mesh.prototype.newPosBuffer = function(){
+    Mesh.prototype.newPosBuffer = function(data){
       var vertices, posBuffer;
-      vertices = [-1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0];
+      vertices = data.vertex;
       posBuffer = this.gl.createBuffer();
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, posBuffer);
       this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(vertices), this.gl.STATIC_DRAW);
       return posBuffer;
     };
-    Mesh.prototype.newIndexBuffer = function(){
+    Mesh.prototype.newIndexBuffer = function(data){
       var indices, indexBuffer;
-      indices = [0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23];
+      indices = data.vertexIndex;
       indexBuffer = this.gl.createBuffer();
       this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
       this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), this.gl.STATIC_DRAW);
       return indexBuffer;
     };
-    Mesh.prototype.newColorBuffer = function(){
-      var colors, colorBuffer;
-      colors = [1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0];
-      colorBuffer = this.gl.createBuffer();
-      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, colorBuffer);
-      this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(colors), this.gl.STATIC_DRAW);
-      return colorBuffer;
+    Mesh.prototype.newTexCoordBuffer = function(data){
+      var textureCoordinates, texCoordBuffer;
+      textureCoordinates = data.texCoord;
+      texCoordBuffer = this.gl.createBuffer();
+      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, texCoordBuffer);
+      this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), this.gl.STATIC_DRAW);
+      return texCoordBuffer;
     };
     return Mesh;
   }());
