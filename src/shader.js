@@ -53,9 +53,11 @@
       this.gl.useProgram(this.program);
     };
     Shader.prototype.getAttribLocation = function(name){
+      this.use();
       return this.gl.getAttribLocation(this.program, name);
     };
     Shader.prototype.getUniformLocation = function(name){
+      this.use();
       return this.gl.getUniformLocation(this.program, name);
     };
     Shader.prototype.setLocal = function(mat){

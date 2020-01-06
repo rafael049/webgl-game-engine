@@ -4,15 +4,9 @@
   window.Texture = Texture = (function(){
     Texture.displayName = 'Texture';
     var isPowerOf2, prototype = Texture.prototype, constructor = Texture;
-    function Texture(gl, filename, cubemap){
-      cubemap == null && (cubemap = false);
+    function Texture(gl, filename){
       this.gl = gl;
-      if (!cubemap) {
-        this.id = this.createTexture("../assets/images/" + filename);
-      } else {
-        this.id = this.createCubemap("../assets/images/" + filename);
-        console.log("tentou carregar cubemap");
-      }
+      this.id = this.createTexture("../assets/images/" + filename);
     }
     Texture.prototype.use = function(){
       return this.gl.bindTexture(this.gl.TEXTURE_2D, this.id);
@@ -37,7 +31,7 @@
       image = new Image;
       image.onload = function(){
         gl.bindTexture(gl.TEXTURE_2D, id);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
         if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
           gl.generateMipmap(gl.TEXTURE_2D);
         }
@@ -48,28 +42,6 @@
       };
       image.src = name;
       return id;
-    };
-    Texture.prototype.createCubemap = function(name){
-      var id, gl, images, i$, i;
-      id = this.createDefaultTexture();
-      gl = this.gl;
-      images = new Array(6);
-      for (i$ = 0; i$ < 6; ++i$) {
-        i = i$;
-        images[i].onload = fn$;
-        images[i].src = name + "" + (i + 1) + ".JPG";
-      }
-      return id;
-      function fn$(){
-        gl.bindTexture(gl.TEXTURE_CUBE_MAP, id);
-        gl.texImage2D(gl.TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, images[i]);
-        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        return console.log("imagem " + i + " carregada");
-      }
     };
     isPowerOf2 = function(value){
       return (value & value - 1) === 0;

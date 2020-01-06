@@ -6,9 +6,9 @@ class window.Skybox extends GameObject
 
         @pos = [0.0, 0.0, 0.0]
 
-        @texture = Resources.getTexture(gl, "sea", true)
-        @shader = Resources.getShader(gl, "default")
-        @mesh = Resources.getMesh(gl, "cube")
+        @texture = Resources.getTexture gl, "skybox.png"
+        @shader = Resources.getShader gl, "skybox"
+        @mesh = Resources.getMesh gl, "skybox"
 
     update: !->
         1 == 1

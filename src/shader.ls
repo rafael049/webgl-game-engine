@@ -52,9 +52,11 @@ class window.Shader
         @gl.useProgram @program
 
     getAttribLocation: (name) ->
+        @use!
         @gl.getAttribLocation @program, name
 
     getUniformLocation: (name) ->
+        @use!
         @gl.getUniformLocation @program, name
 
     setLocal: (mat) !->

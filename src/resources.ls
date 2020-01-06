@@ -12,11 +12,11 @@ class window.Resources
             @meshes[name] = new Mesh(gl, name)
             @meshes[name]
 
-    @getTexture = (gl, name) ->
+    @getTexture = (gl, name, cubemap = false) ->
         if @textures[name]
             @textures[name]
         else
-            @textures[name] = new Texture(gl, name)
+            @textures[name] = new Texture(gl, name, cubemap)
             @textures[name]
 
 
@@ -24,7 +24,7 @@ class window.Resources
         if @shaders[name]
             @shaders[name]
         else
-            @shaders[name] = new Shader(gl, 'default')
+            @shaders[name] = new Shader(gl, name)
             @shaders[name]
 
     @getAudio = (name) ->
