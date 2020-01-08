@@ -41,6 +41,8 @@ class window.Camera
         if Input.keys[65]
             vec3.add(@pos, @pos, vec3.scale([], @right,-@movSpeed))
 
+        Message.send "cameraPosition", @pos
+
     setupVectors: !->
         @front  = vec3.fromValues(
             Math.cos(@yaw*Math.PI/180) * Math.cos(@pitch*Math.PI/180),

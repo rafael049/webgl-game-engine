@@ -4,6 +4,7 @@ class window.Scene
         @objects = []
         @objects.push new PaiJimmy gl, [0, 0,-6]
         @objects.push new PaiJimmy gl, [0, 3, 6]
+        @objects.push new Sprite gl, [0.0, 0.0, 0.0]
 
         @input = new Input
         @camera = new Camera(@gl)
@@ -18,7 +19,7 @@ class window.Scene
         @gl.clearDepth 1.0
 
         @gl.enable @gl.DEPTH_TEST
-        @gl.enable @gl.CULL_FACE
+        #@gl.enable @gl.CULL_FACE
         @gl.depthFunc @gl.LEQUAL
 
     render: !->

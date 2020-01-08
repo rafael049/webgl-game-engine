@@ -46,8 +46,9 @@
         vec3.add(this.pos, this.pos, vec3.scale([], this.right, this.movSpeed));
       }
       if (Input.keys[65]) {
-        return vec3.add(this.pos, this.pos, vec3.scale([], this.right, -this.movSpeed));
+        vec3.add(this.pos, this.pos, vec3.scale([], this.right, -this.movSpeed));
       }
+      return Message.send("cameraPosition", this.pos);
     };
     Camera.prototype.setupVectors = function(){
       this.front = vec3.fromValues(Math.cos(this.yaw * Math.PI / 180) * Math.cos(this.pitch * Math.PI / 180), Math.sin(this.pitch * Math.PI / 180), Math.sin(this.yaw * Math.PI / 180) * Math.cos(this.pitch * Math.PI / 180));
