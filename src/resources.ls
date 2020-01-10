@@ -32,6 +32,6 @@ class window.Resources
             @audio[name]
         else
             audio = document.createElement "AUDIO"
-            audio.src = "../assets/audio/#{name}"
+            audio.src = "assets/audio/#{name}"
             @audio[name] = audio
             @audio[name]

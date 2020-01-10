@@ -40,7 +40,7 @@
         return this.audio[name];
       } else {
         audio = document.createElement("AUDIO");
-        audio.src = "../assets/audio/" + name;
+        audio.src = "assets/audio/" + name;
         this.audio[name] = audio;
         return this.audio[name];
       }

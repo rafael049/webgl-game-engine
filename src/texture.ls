@@ -1,7 +1,7 @@
 class window.Texture
     (gl, filename) ->
         @gl = gl
-        @id = @createTexture "../assets/images/#{filename}"
+        @id = @createTexture "assets/images/#{filename}"
 
     use: ->
         @gl.bindTexture @gl.TEXTURE_2D, @id

@@ -6,7 +6,7 @@
     var isPowerOf2, prototype = Texture.prototype, constructor = Texture;
     function Texture(gl, filename){
       this.gl = gl;
-      this.id = this.createTexture("../assets/images/" + filename);
+      this.id = this.createTexture("assets/images/" + filename);
     }
     Texture.prototype.use = function(){
       return this.gl.bindTexture(this.gl.TEXTURE_2D, this.id);
