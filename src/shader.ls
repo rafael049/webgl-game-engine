@@ -9,7 +9,7 @@ class window.Shader
 
 
     createShader: (name) ->
-        source_str = loadTextFile ("../assets/shaders/#{name}")
+        source_str = loadTextFile ("/assets/shaders/#{name}")
         shader = void
 
         extension = prelude.drop-while (!== '.'), name

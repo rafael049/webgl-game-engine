@@ -13,7 +13,7 @@
     }
     Shader.prototype.createShader = function(name){
       var source_str, shader, extension, info;
-      source_str = loadTextFile("../assets/shaders/" + name);
+      source_str = loadTextFile("/assets/shaders/" + name);
       shader = void 8;
       extension = prelude.dropWhile((function(it){
         return !deepEq$(it, '.', '===');
