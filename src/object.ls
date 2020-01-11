@@ -1,4 +1,4 @@
-class window.GameObject
+class window.GameObject # Object is a reserved word
     (gl) ->
         @name = "no_name"
         @gl = gl

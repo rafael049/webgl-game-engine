@@ -7,11 +7,12 @@
     function Scene(gl){
       this.gl = gl;
       this.objects = [];
-      this.objects.push(new Sprite(gl, [0.0, 0.0, 6.0]));
-      this.objects.push(new Explosion(gl, [0, 0, -6]));
+      this.objects.push(new Xaropinho(gl, [0.0, 0.0, 6.0]));
+      this.objects.push(new Explosion(gl, [0.0, 0.0, -6.0]));
       this.objects.push(new Cenario(gl));
       this.input = new Input;
       this.camera = new Camera(this.gl);
+      this.camera.pos = [0.0, 2.0, 12.0];
       this.audio = new AudioManager;
       this.skybox = new Skybox(this.gl);
       this.gl.clearColor(0.0, 0.1, 0.1, 1.0);

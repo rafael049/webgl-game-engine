@@ -7,7 +7,13 @@
       Explosion.superclass.call(this, gl, pos);
       this.name = "explosion";
       this.texture = Resources.getTexture(gl, "explosion.png");
+      this.shader = Resources.getShader(gl, "sprite");
+      this.anim.xTiles = 8;
+      this.anim.yTiles = 4;
     }
+    Explosion.prototype.update = function(){
+      return this.lookAtCamera();
+    };
     return Explosion;
   }(Sprite));
   function extend$(sub, sup){

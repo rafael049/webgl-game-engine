@@ -2,12 +2,13 @@ class window.Scene
     (gl) ->
         @gl = gl
         @objects = []
-        @objects.push new Sprite gl, [0.0, 0.0, 6.0]
+        @objects.push new Xaropinho gl, [0.0, 0.0, 6.0]
         @objects.push new Explosion gl, [0.0, 0.0, -6.0]
         @objects.push new Cenario gl
 
         @input = new Input
         @camera = new Camera(@gl)
+        @camera.pos = [0.0, 2.0, 12.0]
         @audio = new AudioManager
         @skybox = new Skybox @gl
         #@audio.playSound "rapaiz.mp3"
