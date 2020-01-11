@@ -33,18 +33,16 @@
       this.anim.curFrame += 1;
     };
     Sprite.prototype.lookAtCamera = function(){
-      var camPos, dist;
+      var camPos, pos, dist;
       camPos = vec3.clone(Message.get("cameraPosition"));
+      pos = vec3.clone(this.pos);
       if (camPos) {
-        camPos[1] = 0.0;
         camPos[2] *= -1;
-        dist = vec3.sub([0.0, 0.0, 0.0], camPos, this.pos);
+        pos[2] *= -1;
+        dist = vec3.create();
+        dist = [camPos[0] - pos[0], 0.0, camPos[2] - pos[2]];
         vec3.normalize(dist, dist);
-        if (dist[0] > 0.0 && dist[2] > 0.0) {
-          this.rot[1] = Math.atan(dist[2] / dist[0]);
-        } else if (dist[0] < 0.0 && dist[2] > 0.0) {
-          this.rot[1] = Math.PI + Math.atan(dist[2] / dist[0]);
-        } else if (dist[0] < 0.0 && dist[2] < 0.0) {
+        if (dist[0] < 0.0) {
           this.rot[1] = Math.PI + Math.atan(dist[2] / dist[0]);
         } else {
           this.rot[1] = Math.atan(dist[2] / dist[0]);

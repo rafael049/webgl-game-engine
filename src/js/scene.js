@@ -7,8 +7,8 @@
     function Scene(gl){
       this.gl = gl;
       this.objects = [];
-      this.objects.push(new Xaropinho(gl, [0.0, 0.0, 6.0]));
-      this.objects.push(new Explosion(gl, [0.0, 0.0, -6.0]));
+      this.objects.push(new Xaropinho(gl, [-6.0, 0.0, -6.0]));
+      this.objects.push(new Explosion(gl, [6.0, 0.0, -6.0]));
       this.objects.push(new Cenario(gl));
       this.input = new Input;
       this.camera = new Camera(this.gl);

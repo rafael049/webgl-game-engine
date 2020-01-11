@@ -2,8 +2,8 @@ class window.Scene
     (gl) ->
         @gl = gl
         @objects = []
-        @objects.push new Xaropinho gl, [0.0, 0.0, 6.0]
-        @objects.push new Explosion gl, [0.0, 0.0, -6.0]
+        @objects.push new Xaropinho gl, [-6.0, 0.0,-6.0]
+        @objects.push new Explosion gl, [ 6.0, 0.0,-6.0]
         @objects.push new Cenario gl
 
         @input = new Input
