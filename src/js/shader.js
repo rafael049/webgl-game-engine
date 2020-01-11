@@ -73,7 +73,10 @@
       this.gl.uniformMatrix4fv(this.getUniformLocation("uProjectionMat"), false, mat);
     };
     Shader.prototype.setTexture = function(id){
-      return this.gl.uniform1i(this.getUniformLocation("uTexture"), id);
+      this.gl.uniform1i(this.getUniformLocation("uTexture"), id);
+    };
+    Shader.prototype.setUniformInt = function(name, value){
+      this.gl.uniform1i(this.getUniformLocation(name), value);
     };
     loadTextFile = function(path){
       var result, xmlhttp;

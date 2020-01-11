@@ -2,9 +2,9 @@ class window.Scene
     (gl) ->
         @gl = gl
         @objects = []
-        @objects.push new PaiJimmy gl, [0, 0,-6]
-        @objects.push new PaiJimmy gl, [0, 3, 6]
-        @objects.push new Sprite gl, [0.0, 0.0, 0.0]
+        @objects.push new Sprite gl, [0.0, 0.0, 6.0]
+        @objects.push new Explosion gl, [0.0, 0.0, -6.0]
+        @objects.push new Cenario gl
 
         @input = new Input
         @camera = new Camera(@gl)

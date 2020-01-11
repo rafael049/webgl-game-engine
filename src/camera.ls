@@ -41,6 +41,11 @@ class window.Camera
         if Input.keys[65]
             vec3.add(@pos, @pos, vec3.scale([], @right,-@movSpeed))
 
+        if Input.keys[81]
+            @pos[1] += @movSpeed
+        if Input.keys[90]
+            @pos[1] -= @movSpeed
+
         Message.send "cameraPosition", @pos
 
     setupVectors: !->

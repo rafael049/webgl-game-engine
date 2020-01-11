@@ -7,11 +7,24 @@
       Sprite.superclass.call(this, gl);
       this.name = "xaropinho";
       this.pos = pos;
+      this.curFrame = 0;
+      this.curAnimation = "Idle";
       this.texture = Resources.getTexture(gl, "xaropinho.png");
       this.shader = Resources.getShader(gl, "sprite");
       this.mesh = Resources.getMesh(gl, "sprite1");
+      this.shader.setUniformInt("x_tiles", 8);
+      this.shader.setUniformInt("y_tiles", 4);
+      this.shader.setUniformInt("frame", 0);
     }
     Sprite.prototype.update = function(){
+      this.lookAtCamera();
+      return this.nextFrame();
+    };
+    Sprite.prototype.nextFrame = function(){
+      this.curFrame += 1;
+      this.shader.setUniformInt("frame", this.curFrame);
+    };
+    Sprite.prototype.lookAtCamera = function(){
       var camPos, dist;
       camPos = vec3.clone(Message.get("cameraPosition"));
       if (camPos) {
@@ -28,7 +41,7 @@
         } else {
           this.rot[1] = Math.atan(dist[2] / dist[0]);
         }
-        return this.rot[1] += Math.PI / 2;
+        this.rot[1] += Math.PI / 2;
       }
     };
     return Sprite;

@@ -4,12 +4,27 @@ class window.Sprite extends GameObject
         @name = "xaropinho"
 
         @pos = pos
+        @curFrame = 0
+        @curAnimation = "Idle"
 
         @texture = Resources.getTexture(gl, "xaropinho.png") #new Texture(gl, "paiJimmy.png")
         @shader = Resources.getShader(gl, "sprite")
         @mesh = Resources.getMesh(gl, "sprite1")
 
+        # Configure shader
+        @shader.setUniformInt("x_tiles", 8)
+        @shader.setUniformInt("y_tiles", 4)
+        @shader.setUniformInt("frame", 0)
+
     update: ->
+        @lookAtCamera!
+        @nextFrame!
+
+    nextFrame: !->
+        @curFrame += 1
+        @shader.setUniformInt "frame", @curFrame
+
+    lookAtCamera: ! ->
         camPos = vec3.clone Message.get "cameraPosition"
         #console.log "CameraPosition: #{camPos[0]}, #{camPos[2]}"
         #console.log "angle: #{@rot[1]}"
@@ -31,4 +46,3 @@ class window.Sprite extends GameObject
                 @rot[1] = Math.atan(dist[2]/dist[0])
 
             @rot[1] += Math.PI/2
-

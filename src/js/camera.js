@@ -14,8 +14,8 @@
       this.worldUp = vec3.fromValues(0.0, 1.0, 0.0);
       this.yaw = -90.0;
       this.pitch = 0.0;
-      this.movSpeed = 0.2;
-      this.sensivity = 2.0;
+      this.movSpeed = 0.1;
+      this.sensivity = 0.1;
       this.fov = 35.0;
       this.znear = 0.1;
       this.zfar = 1000.0;
@@ -25,16 +25,16 @@
     Camera.prototype.update = function(){
       this.setupVectors();
       if (Input.keys[75]) {
-        this.pitch += 0.5 * this.sensivity;
+        this.pitch += 0.5;
       }
       if (Input.keys[74]) {
-        this.pitch -= 0.5 * this.sensivity;
+        this.pitch -= 0.5;
       }
       if (Input.keys[76]) {
-        this.yaw += 0.5 * this.sensivity;
+        this.yaw += 0.5;
       }
       if (Input.keys[72]) {
-        this.yaw -= 0.5 * this.sensivity;
+        this.yaw -= 0.5;
       }
       if (Input.keys[87]) {
         vec3.add(this.pos, this.pos, vec3.scale([], this.front, this.movSpeed));
@@ -47,6 +47,12 @@
       }
       if (Input.keys[65]) {
         vec3.add(this.pos, this.pos, vec3.scale([], this.right, -this.movSpeed));
+      }
+      if (Input.keys[81]) {
+        this.pos[1] += this.movSpeed;
+      }
+      if (Input.keys[90]) {
+        this.pos[1] -= this.movSpeed;
       }
       return Message.send("cameraPosition", this.pos);
     };

@@ -87,10 +87,15 @@ class window.Shader
             mat
         )
 
-    setTexture: (id) ->
+    setTexture: (id) !->
         @gl.uniform1i(
             @getUniformLocation("uTexture"),
             id
+        )
+    setUniformInt: (name, value) !->
+        @gl.uniform1i(
+            @getUniformLocation(name),
+            value
         )
 
     loadTextFile = (path) ->
