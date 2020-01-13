@@ -15,6 +15,8 @@
       this.camera.pos = [0.0, 2.0, 12.0];
       this.audio = new AudioManager;
       this.skybox = new Skybox(this.gl);
+      this.text = new Text("yuri gagaldi", "Lucidas Console", [100, 300], 32);
+      this.text.setText("Que dor nas costas do caralho aaaaaaaa!");
       this.gl.clearColor(0.0, 0.1, 0.1, 1.0);
       this.gl.clearDepth(1.0);
       this.gl.enable(this.gl.DEPTH_TEST);

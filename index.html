@@ -4,11 +4,27 @@
         <title>Teste WebGL</title>
         <meta charset="utf-8">
     </head>
-
-    <body style="background: #000000;">
-        <canvas id="canvas" style="border-style: solid;"
+    
+    <div id="container">
+        <canvas id="canvas" 
+            style="
+                border-style: solid;
+                position: relative;
+            "
             width="800" height="600">
         </canvas>
+        <div id="overlay" 
+            style="
+                position: absolute;
+                left: 20px;
+                top: 20px;
+            ">
+
+            <span id="text"></span>
+        </div>
+    </div>
+
+    <body style="background: #000000;">
         <script src="lib/gl-matrix.js"></script>
         <script src="lib/prelude-browser-min.js">
             prelude = require("prelude-ls");
@@ -21,6 +37,7 @@
         <script src="src/js/resources.js"></script>
         <script src="src/js/audioManager.js"></script>
         <script src="src/js/message.js"></script>
+        <script src="src/js/text.js"></script>
         <script src="src/js/camera.js"></script>
         <script src="src/js/object.js"></script>
         <script src="src/js/sprite.js"></script>
@@ -33,5 +50,4 @@
         <script src="src/js/game.js"></script>
         <script src="src/js/main.js"></script>
     </body>
-
 </html>

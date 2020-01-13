@@ -11,16 +11,16 @@ class window.Scene
         @camera.pos = [0.0, 2.0, 12.0]
         @audio = new AudioManager
         @skybox = new Skybox @gl
-        #@audio.playSound "rapaiz.mp3"
-        #@audio.playSound "irra.mp3"
-            #AudioManager.playSound "rapaiz.mp3"
+
+        @text = new Text "yuri gagaldi", "Lucidas Console", [100, 300], 32
+        @text.setText "Que dor nas costas do caralho aaaaaaaa!"
+
 
         # Setup Render
         @gl.clearColor 0.0, 0.1, 0.1, 1.0
         @gl.clearDepth 1.0
 
         @gl.enable @gl.DEPTH_TEST
-        #@gl.enable @gl.CULL_FACE
         @gl.depthFunc @gl.LEQUAL
 
     render: !->
