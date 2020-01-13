@@ -6,8 +6,8 @@ class window.Sprite extends GameObject
         @pos = pos
 
         @anim = {
-            xTiles: 2
-            yTiles: 2
+            xTiles: 1
+            yTiles: 1
             curFrame: 0
             curAnim: "Idle"
         }

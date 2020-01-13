@@ -12,10 +12,7 @@ class window.Scene
         @audio = new AudioManager
         @skybox = new Skybox @gl
 
-        @text = new Text "yuri gagaldi", "Lucidas Console", [100, 300], 32
-        @text.setText "Que dor nas costas do caralho aaaaaaaa!"
-
-
+        @hud = new HUD gl
         # Setup Render
         @gl.clearColor 0.0, 0.1, 0.1, 1.0
         @gl.clearDepth 1.0
@@ -24,7 +21,6 @@ class window.Scene
         @gl.depthFunc @gl.LEQUAL
 
     render: !->
-
         @gl.clear (@gl.COLOR_BUFFER_BIT .|. @gl.DEPTH_BUFFER_BIT)
 
         projectionMatrix = @camera.getProjectionMatrix!
@@ -36,6 +32,8 @@ class window.Scene
 
         # Render Skybox
         @skybox.render viewMatrix, projectionMatrix
+        # Render HUD
+        @hud.render viewMatrix
 
     update: !->
         @camera.update!
