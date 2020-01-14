@@ -26,7 +26,7 @@ class window.Sprite extends GameObject
         @shader.setUniformInt("y_tiles", @anim.yTiles)
         @setShaderAnimation!
         super ...
-        @playCurAnim!
+        @nextFrame!
 
     update: ->
         1 == 1
@@ -35,18 +35,33 @@ class window.Sprite extends GameObject
         @shader.setUniformInt("frame", @anim.curFrame)
 
     nextFrame: !->
-        @anim.curFrame += 1
-
-    playCurAnim: !->
         start = @anim.anims[@anim.curAnim][0]
         end   = @anim.anims[@anim.curAnim][1]
 
-
+        # Verify if the current animation ended
         if @anim.curFrame == end
             @anim.ended = true
-            if @anim.loopAnim then @anim.curFrame = 0
+
+        # Reset animation if loop is set
+        if @anim.ended and @anim.loopAnim
+            @anim.curFrame = start
+            @anim.ended = false
+        else if @anim.ended
+            @anim.curFrame = end
         else
+            # Advance to next frame
             @anim.curFrame += 1
+
+
+    playAnim: (name, _loop = true) ->
+        @anim.curAnim = name
+        start = @anim.anims[name][0]
+        end   = @anim.anims[name][1]
+
+        @anim.curFrame = start
+        @anim.ended = false
+        @anim.loopAnim = _loop
+
 
     lookAtCamera: ! ->
         camPos = vec3.clone Message.get "cameraPosition"

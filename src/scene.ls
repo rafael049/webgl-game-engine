@@ -43,3 +43,4 @@ class window.Scene
 
         if Input.keys[32]
             AudioManager.playSound "rapaiz.mp3"
+        @hud.update!

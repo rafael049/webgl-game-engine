@@ -26,7 +26,7 @@
       this.shader.setUniformInt("y_tiles", this.anim.yTiles);
       this.setShaderAnimation();
       superclass.prototype.render.apply(this, arguments);
-      return this.playCurAnim();
+      return this.nextFrame();
     };
     Sprite.prototype.update = function(){
       return 1 === 1;
@@ -35,20 +35,30 @@
       this.shader.setUniformInt("frame", this.anim.curFrame);
     };
     Sprite.prototype.nextFrame = function(){
-      this.anim.curFrame += 1;
-    };
-    Sprite.prototype.playCurAnim = function(){
       var start, end;
       start = this.anim.anims[this.anim.curAnim][0];
       end = this.anim.anims[this.anim.curAnim][1];
       if (this.anim.curFrame === end) {
         this.anim.ended = true;
-        if (this.anim.loopAnim) {
-          this.anim.curFrame = 0;
-        }
+      }
+      if (this.anim.ended && this.anim.loopAnim) {
+        this.anim.curFrame = start;
+        this.anim.ended = false;
+      } else if (this.anim.ended) {
+        this.anim.curFrame = end;
       } else {
         this.anim.curFrame += 1;
       }
+    };
+    Sprite.prototype.playAnim = function(name, _loop){
+      var start, end;
+      _loop == null && (_loop = true);
+      this.anim.curAnim = name;
+      start = this.anim.anims[name][0];
+      end = this.anim.anims[name][1];
+      this.anim.curFrame = start;
+      this.anim.ended = false;
+      return this.anim.loopAnim = _loop;
     };
     Sprite.prototype.lookAtCamera = function(){
       var camPos, pos, dist;

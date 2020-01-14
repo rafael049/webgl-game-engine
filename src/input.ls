@@ -1,5 +1,6 @@
 class window.Input
     @keys = []
+    @keysTap = []
     ->
         window.addEventListener 'keydown', @keydownCallback
         window.addEventListener 'keyup', @keyupCallback
@@ -10,3 +11,4 @@ class window.Input
     keyupCallback: (e) ->
         @@keys[e.keyCode] = false
 
+    

@@ -43,6 +43,7 @@
       if (Input.keys[32]) {
         AudioManager.playSound("rapaiz.mp3");
       }
+      this.hud.update();
     };
     return Scene;
   }());
