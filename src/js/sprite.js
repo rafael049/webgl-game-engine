@@ -11,32 +11,51 @@
         xTiles: 1,
         yTiles: 1,
         curFrame: 0,
-        curAnim: "Idle"
+        curAnim: "Idle",
+        anims: {
+          Idle: [0, 0]
+        },
+        loopAnim: true,
+        ended: false
       };
       this.shader = Resources.getShader(gl, "sprite");
       this.mesh = Resources.getMesh(gl, "sprite1");
     }
     Sprite.prototype.render = function(viewMatrix, projectionMatrix){
+      this.shader.setUniformInt("x_tiles", this.anim.xTiles);
+      this.shader.setUniformInt("y_tiles", this.anim.yTiles);
       this.setShaderAnimation();
-      this.nextFrame();
-      return superclass.prototype.render.apply(this, arguments);
+      superclass.prototype.render.apply(this, arguments);
+      return this.playCurAnim();
     };
     Sprite.prototype.update = function(){
       return 1 === 1;
     };
     Sprite.prototype.setShaderAnimation = function(){
-      this.shader.setUniformInt("x_tiles", this.anim.xTiles);
-      this.shader.setUniformInt("y_tiles", this.anim.yTiles);
       this.shader.setUniformInt("frame", this.anim.curFrame);
     };
     Sprite.prototype.nextFrame = function(){
       this.anim.curFrame += 1;
+    };
+    Sprite.prototype.playCurAnim = function(){
+      var start, end;
+      start = this.anim.anims[this.anim.curAnim][0];
+      end = this.anim.anims[this.anim.curAnim][1];
+      if (this.anim.curFrame === end) {
+        this.anim.ended = true;
+        if (this.anim.loopAnim) {
+          this.anim.curFrame = 0;
+        }
+      } else {
+        this.anim.curFrame += 1;
+      }
     };
     Sprite.prototype.lookAtCamera = function(){
       var camPos, pos, dist;
       camPos = vec3.clone(Message.get("cameraPosition"));
       pos = vec3.clone(this.pos);
       if (camPos) {
+        camPos[1] = 0.0;
         camPos[2] *= -1;
         pos[2] *= -1;
         dist = vec3.create();

@@ -10,6 +10,10 @@
       this.shader = Resources.getShader(gl, "sprite");
       this.anim.xTiles = 8;
       this.anim.yTiles = 4;
+      this.anim.anims["Idle"] = [0, 31];
+      this.anim.curAnim = "Idle";
+      this.anim.ended = false;
+      this.anim.loopAnim = true;
     }
     Explosion.prototype.update = function(){
       return this.lookAtCamera();

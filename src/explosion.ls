@@ -5,14 +5,12 @@ class window.Explosion extends Sprite
         @texture = Resources.getTexture(gl, "explosion.png")
         @shader = Resources.getShader(gl, "sprite")
 
-        #@anim = {
-        #    xTiles: 8
-        #    yTiles: 4
-        #    curFrame: 0
-        #    curAnim: "Idle"
-        #}
         @anim.xTiles = 8
         @anim.yTiles = 4
+        @anim.anims["Idle"] = [0, 31]
+        @anim.curAnim = "Idle"
+        @anim.ended = false
+        @anim.loopAnim = true
 
     update: ->
         @lookAtCamera!

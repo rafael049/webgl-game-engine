@@ -20,8 +20,8 @@ void main(void) {
     gl_Position = uProjectionMat*viewMat*uModelMat*uLocalMat*aVertexPosition;
 
     vec2 tiledTexCoord = aTexCoord;
-    tiledTexCoord.x = tiledTexCoord.x/float(x_tiles) + float( mod(frame+1, x_tiles) )/float(x_tiles);
-    tiledTexCoord.y = tiledTexCoord.y/float(y_tiles) + float( mod((frame+1)/x_tiles, y_tiles) )/float(y_tiles);
+    tiledTexCoord.x = tiledTexCoord.x/float(x_tiles) + float( mod(frame, x_tiles) )/float(x_tiles);
+    tiledTexCoord.y = tiledTexCoord.y/float(y_tiles) + float( mod((frame)/x_tiles, y_tiles) )/float(y_tiles);
     vTexCoord = tiledTexCoord;
 }
 
