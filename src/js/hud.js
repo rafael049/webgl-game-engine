@@ -30,8 +30,10 @@
       return this.sprite.render(projectionMatrix);
     };
     WeaponHud.prototype.update = function(){
-      if (Input.keys[70]) {
-        return this.sprite.playAnim("Shot", false);
+      if (Input.onKeydown(70)) {
+        this.sprite.playAnim("Shot", false);
+        AudioManager.playSound("tiro.mp3");
+        return console.log("Olha o tiro");
       }
     };
     return WeaponHud;

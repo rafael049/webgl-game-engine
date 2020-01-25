@@ -10,8 +10,9 @@
       this.objects.push(new Xaropinho(gl, [-6.0, 0.0, -6.0]));
       this.objects.push(new Explosion(gl, [6.0, 0.0, -6.0]));
       this.objects.push(new Cenario(gl));
+      this.player = new Player([0.0, 0.0, 0.0]);
       this.input = new Input;
-      this.camera = new Camera(this.gl);
+      this.camera = new Camera(this.gl, [0.0, 2.0, 0.0], this.player);
       this.camera.pos = [0.0, 2.0, 12.0];
       this.audio = new AudioManager;
       this.skybox = new Skybox(this.gl);
@@ -36,6 +37,7 @@
     Scene.prototype.update = function(){
       var i$, ref$, len$, obj;
       this.camera.update();
+      this.player.update(1.0);
       for (i$ = 0, len$ = (ref$ = this.objects).length; i$ < len$; ++i$) {
         obj = ref$[i$];
         obj.update();

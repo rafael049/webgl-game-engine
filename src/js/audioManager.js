@@ -7,7 +7,7 @@
     sounds = {};
     soundChannels = [];
     trackChannel = void 8;
-    NUM_CHANNELS = 1;
+    NUM_CHANNELS = 4;
     currentChannel = 0;
     AudioManager.playSound = function(name){
       var audio;

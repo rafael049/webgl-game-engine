@@ -23,14 +23,16 @@ class SpriteHUD extends Sprite
 
 class WeaponHud
     (gl) ->
-        @sprite = new SpriteHUD gl, [1.2, -2.1,-0.1]
+        @sprite = new SpriteHUD gl, [1.2, -2.1, -0.1]
 
-    render:(projectionMatrix) ->
+    render: (projectionMatrix) ->
         @sprite.render projectionMatrix
 
     update: ->
-        if Input.keys[70]
+        if Input.onKeydown(70)
             @sprite.playAnim "Shot", false
+            AudioManager.playSound "tiro.mp3"
+            console.log "Olha o tiro"
 
 
 class window.HUD

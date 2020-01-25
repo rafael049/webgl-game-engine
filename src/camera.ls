@@ -1,7 +1,12 @@
 class window.Camera
-    (gl, pos = vec3.create!) ->
+    (gl, pos = vec3.create!, parent=void) ->
         @gl = gl
         @pos = pos
+        @parent = parent
+
+        @offset = [0.0, 0.0, 0.0] # Offset from parent
+        if parent
+            @offset = pos
 
         @front = vec3.create!
         @up = vec3.create!
@@ -23,6 +28,10 @@ class window.Camera
     update: ->
         @setupVectors!
 
+        # Adjust position to follow parent
+        if @parent
+            vec3.add(@pos, @parent.pos, @offset)
+
         if Input.keys[75]
             @pitch += 0.5
         if Input.keys[74]
@@ -32,19 +41,20 @@ class window.Camera
         if Input.keys[72]
             @yaw -= 0.5
 
-        if Input.keys[87]
-            vec3.add(@pos, @pos, vec3.scale([], @front, @movSpeed))
-        if Input.keys[83]
-            vec3.add(@pos, @pos, vec3.scale([], @front,-@movSpeed))
-        if Input.keys[68]
-            vec3.add(@pos, @pos, vec3.scale([], @right, @movSpeed))
-        if Input.keys[65]
-            vec3.add(@pos, @pos, vec3.scale([], @right,-@movSpeed))
+        if not @parent
+            if Input.keys[87]
+                vec3.add(@pos, @pos, vec3.scale([], @front, @movSpeed))
+            if Input.keys[83]
+                vec3.add(@pos, @pos, vec3.scale([], @front,-@movSpeed))
+            if Input.keys[68]
+                vec3.add(@pos, @pos, vec3.scale([], @right, @movSpeed))
+            if Input.keys[65]
+                vec3.add(@pos, @pos, vec3.scale([], @right,-@movSpeed))
 
-        if Input.keys[81]
-            @pos[1] += @movSpeed
-        if Input.keys[90]
-            @pos[1] -= @movSpeed
+            if Input.keys[81]
+                @pos[1] += @movSpeed
+            if Input.keys[90]
+                @pos[1] -= @movSpeed
 
         Message.send "cameraPosition", @pos
 

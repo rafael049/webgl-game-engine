@@ -4,10 +4,16 @@
   window.Camera = Camera = (function(){
     Camera.displayName = 'Camera';
     var prototype = Camera.prototype, constructor = Camera;
-    function Camera(gl, pos){
+    function Camera(gl, pos, parent){
       pos == null && (pos = vec3.create());
+      parent == null && (parent = void 8);
       this.gl = gl;
       this.pos = pos;
+      this.parent = parent;
+      this.offset = [0.0, 0.0, 0.0];
+      if (parent) {
+        this.offset = pos;
+      }
       this.front = vec3.create();
       this.up = vec3.create();
       this.right = vec3.create();
@@ -24,6 +30,9 @@
     }
     Camera.prototype.update = function(){
       this.setupVectors();
+      if (this.parent) {
+        vec3.add(this.pos, this.parent.pos, this.offset);
+      }
       if (Input.keys[75]) {
         this.pitch += 0.5;
       }
@@ -36,23 +45,25 @@
       if (Input.keys[72]) {
         this.yaw -= 0.5;
       }
-      if (Input.keys[87]) {
-        vec3.add(this.pos, this.pos, vec3.scale([], this.front, this.movSpeed));
-      }
-      if (Input.keys[83]) {
-        vec3.add(this.pos, this.pos, vec3.scale([], this.front, -this.movSpeed));
-      }
-      if (Input.keys[68]) {
-        vec3.add(this.pos, this.pos, vec3.scale([], this.right, this.movSpeed));
-      }
-      if (Input.keys[65]) {
-        vec3.add(this.pos, this.pos, vec3.scale([], this.right, -this.movSpeed));
-      }
-      if (Input.keys[81]) {
-        this.pos[1] += this.movSpeed;
-      }
-      if (Input.keys[90]) {
-        this.pos[1] -= this.movSpeed;
+      if (!this.parent) {
+        if (Input.keys[87]) {
+          vec3.add(this.pos, this.pos, vec3.scale([], this.front, this.movSpeed));
+        }
+        if (Input.keys[83]) {
+          vec3.add(this.pos, this.pos, vec3.scale([], this.front, -this.movSpeed));
+        }
+        if (Input.keys[68]) {
+          vec3.add(this.pos, this.pos, vec3.scale([], this.right, this.movSpeed));
+        }
+        if (Input.keys[65]) {
+          vec3.add(this.pos, this.pos, vec3.scale([], this.right, -this.movSpeed));
+        }
+        if (Input.keys[81]) {
+          this.pos[1] += this.movSpeed;
+        }
+        if (Input.keys[90]) {
+          this.pos[1] -= this.movSpeed;
+        }
       }
       return Message.send("cameraPosition", this.pos);
     };

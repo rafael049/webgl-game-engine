@@ -6,8 +6,10 @@ class window.Scene
         @objects.push new Explosion gl, [ 6.0, 0.0,-6.0]
         @objects.push new Cenario gl
 
+        @player = new Player [0.0, 0.0, 0.0]
+
         @input = new Input
-        @camera = new Camera(@gl)
+        @camera = new Camera @gl, [0.0, 2.0, 0.0], @player
         @camera.pos = [0.0, 2.0, 12.0]
         @audio = new AudioManager
         @skybox = new Skybox @gl
@@ -37,6 +39,8 @@ class window.Scene
 
     update: !->
         @camera.update!
+
+        @player.update 1.0
 
         for obj in @objects
             obj.update!
