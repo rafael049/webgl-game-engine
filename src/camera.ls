@@ -57,6 +57,8 @@ class window.Camera
                 @pos[1] -= @movSpeed
 
         Message.send "cameraPosition", @pos
+        Message.send "cameraFrontVec", @front
+        Message.send "cameraRightVec", @right
 
     setupVectors: !->
         @front  = vec3.fromValues(

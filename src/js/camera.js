@@ -65,7 +65,9 @@
           this.pos[1] -= this.movSpeed;
         }
       }
-      return Message.send("cameraPosition", this.pos);
+      Message.send("cameraPosition", this.pos);
+      Message.send("cameraFrontVec", this.front);
+      return Message.send("cameraRightVec", this.right);
     };
     Camera.prototype.setupVectors = function(){
       this.front = vec3.fromValues(Math.cos(this.yaw * Math.PI / 180) * Math.cos(this.pitch * Math.PI / 180), Math.sin(this.pitch * Math.PI / 180), Math.sin(this.yaw * Math.PI / 180) * Math.cos(this.pitch * Math.PI / 180));
