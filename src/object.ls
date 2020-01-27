@@ -12,6 +12,9 @@ class window.GameObject # Object is a reserved word
         @localMat = mat4.create!
         @modelViewMat = mat4.create!
 
+        @canCollide = false
+        @collidingWith = []
+
     render: (viewMatrix, projectionMatrix) ->
 
         modelMatrix = mat4.create!

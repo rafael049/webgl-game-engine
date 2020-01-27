@@ -38,6 +38,7 @@
       var i$, ref$, len$, obj;
       this.camera.update();
       this.player.update(1.0);
+      Collision.check(this.objects, this.player);
       for (i$ = 0, len$ = (ref$ = this.objects).length; i$ < len$; ++i$) {
         obj = ref$[i$];
         obj.update();

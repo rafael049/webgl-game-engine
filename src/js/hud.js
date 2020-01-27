@@ -44,7 +44,6 @@
     function HUD(gl){
       this.gl = gl;
       this.weapon = new WeaponHud(gl);
-      this.text = new Text("Puta dor nas costas socorro", "Lucidas Console", [100, 300], 32, "#ffffff", true);
     }
     HUD.prototype.render = function(){
       var orthoProjectionMatrix;

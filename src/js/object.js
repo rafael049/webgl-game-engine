@@ -13,6 +13,8 @@
       this.vel = vec3.create();
       this.localMat = mat4.create();
       this.modelViewMat = mat4.create();
+      this.canCollide = false;
+      this.collidingWith = [];
     }
     GameObject.prototype.render = function(viewMatrix, projectionMatrix){
       var modelMatrix, localMatrix;

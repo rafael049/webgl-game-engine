@@ -42,6 +42,9 @@ class window.Scene
 
         @player.update 1.0
 
+        # Get current vel and pos from objs and check collision
+        Collision.check @objects, @player
+
         for obj in @objects
             obj.update!
 

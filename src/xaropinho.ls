@@ -7,6 +7,8 @@ class window.Xaropinho extends Sprite
         @shader = Resources.getShader(gl, "sprite")
         @mesh = Resources.getMesh(gl, "sprite1")
 
+        @canCollide = true
+
         @anim.xTiles = 1
         @anim.yTiles = 1
 

@@ -9,6 +9,7 @@
       this.texture = Resources.getTexture(gl, "xaropinho.png");
       this.shader = Resources.getShader(gl, "sprite");
       this.mesh = Resources.getMesh(gl, "sprite1");
+      this.canCollide = true;
       this.anim.xTiles = 1;
       this.anim.yTiles = 1;
     }
