@@ -33,13 +33,13 @@ class window.Player
 
     readInput: !->
         @dir = [0.0, 0.0, 0.0]
-        if Input.keys[87]
-            @dir[2] = 1
-        if Input.keys[83]
-            @dir[2] = -1
-        if Input.keys[68]
-            @dir[0] = 1
-        if Input.keys[65]
-            @dir[0] = -1
+        if Input.keys[87]       # W
+            @dir[2] += 1
+        if Input.keys[83]       # S
+            @dir[2] += -1
+        if Input.keys[68]       # D
+            @dir[0] += 1
+        if Input.keys[65]       # A
+            @dir[0] += -1
 
         vec3.normalize @dir, @dir

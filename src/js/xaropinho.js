@@ -10,6 +10,7 @@
       this.shader = Resources.getShader(gl, "sprite");
       this.mesh = Resources.getMesh(gl, "sprite1");
       this.canCollide = true;
+      this.radius = 10.0;
       this.anim.xTiles = 1;
       this.anim.yTiles = 1;
     }

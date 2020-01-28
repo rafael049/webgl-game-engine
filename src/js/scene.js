@@ -8,7 +8,12 @@
       this.gl = gl;
       this.objects = [];
       this.objects.push(new Xaropinho(gl, [-6.0, 0.0, -6.0]));
-      this.objects.push(new Explosion(gl, [6.0, 0.0, -6.0]));
+      this.objects.push(new Xaropinho(gl, [-9.0, 0.0, -12.0]));
+      this.objects.push(new Xaropinho(gl, [5.0, 0.0, 12.0]));
+      this.objects.push(new Xaropinho(gl, [-8.0, 0.0, -4.0]));
+      this.objects.push(new Xaropinho(gl, [3.0, 0.0, 7.0]));
+      this.objects.push(new Xaropinho(gl, [8.0, 0.0, -12.0]));
+      this.objects.push(new Explosion(gl, [8.0, 0.0, -6.0]));
       this.objects.push(new Cenario(gl));
       this.player = new Player([0.0, 0.0, 0.0]);
       this.input = new Input;
