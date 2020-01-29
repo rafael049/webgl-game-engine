@@ -14,8 +14,7 @@
     Input.prototype.keydownCallback = function(e){
       if (!e.repeat) {
         constructor._keys[e.keyCode] = true;
-        constructor.keys[e.keyCode] = true;
-        return console.log("Keydown");
+        return constructor.keys[e.keyCode] = true;
       }
     };
     Input.prototype.keyupCallback = function(e){

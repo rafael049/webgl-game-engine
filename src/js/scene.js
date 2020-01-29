@@ -9,12 +9,8 @@
       this.objects = [];
       this.objects.push(new Xaropinho(gl, [-6.0, 0.0, -6.0]));
       this.objects.push(new Xaropinho(gl, [-9.0, 0.0, -12.0]));
-      this.objects.push(new Xaropinho(gl, [5.0, 0.0, 12.0]));
-      this.objects.push(new Xaropinho(gl, [-8.0, 0.0, -4.0]));
-      this.objects.push(new Xaropinho(gl, [3.0, 0.0, 7.0]));
-      this.objects.push(new Xaropinho(gl, [8.0, 0.0, -12.0]));
       this.objects.push(new Explosion(gl, [8.0, 0.0, -6.0]));
-      this.objects.push(new Cenario(gl));
+      this.cenario = new Cenario(gl);
       this.player = new Player([0.0, 0.0, 0.0]);
       this.input = new Input;
       this.camera = new Camera(this.gl, [0.0, 2.0, 0.0], this.player);
@@ -32,12 +28,12 @@
       this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
       projectionMatrix = this.camera.getProjectionMatrix();
       viewMatrix = this.camera.getViewMatrix();
+      this.cenario.render(viewMatrix, projectionMatrix);
       for (i$ = 0, len$ = (ref$ = this.objects).length; i$ < len$; ++i$) {
         obj = ref$[i$];
         obj.render(viewMatrix, projectionMatrix);
       }
       this.skybox.render(viewMatrix, projectionMatrix);
-      this.hud.render(viewMatrix);
     };
     Scene.prototype.update = function(){
       var i$, ref$, len$, obj;

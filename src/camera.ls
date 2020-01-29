@@ -16,7 +16,7 @@ class window.Camera
         @yaw = -90.0
         @pitch = 0.0
         @movSpeed = 0.1
-        @sensivity = 0.1
+        @sensivity = 1.5
 
         @fov = 35.0 # degrees
         @znear = 0.1
@@ -33,13 +33,13 @@ class window.Camera
             vec3.add(@pos, @parent.pos, @offset)
 
         if Input.keys[75]
-            @pitch += 0.5
+            @pitch += @sensivity
         if Input.keys[74]
-            @pitch -= 0.5
+            @pitch -= @sensivity
         if Input.keys[76]
-            @yaw += 0.5
+            @yaw += @sensivity
         if Input.keys[72]
-            @yaw -= 0.5
+            @yaw -= @sensivity
 
         if not @parent
             if Input.keys[87]

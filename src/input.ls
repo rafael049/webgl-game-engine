@@ -11,7 +11,6 @@ class window.Input
         if not e.repeat
             @@_keys[e.keyCode] = true
             @@keys[e.keyCode] = true
-            console.log "Keydown"
 
     keyupCallback: (e) ->
         @@keys[e.keyCode] = false

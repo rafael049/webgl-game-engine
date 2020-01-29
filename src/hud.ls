@@ -32,7 +32,6 @@ class WeaponHud
         if Input.onKeydown(70)
             @sprite.playAnim "Shot", false
             AudioManager.playSound "tiro.mp3"
-            console.log "Olha o tiro"
 
 
 class window.HUD

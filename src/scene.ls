@@ -4,12 +4,8 @@ class window.Scene
         @objects = []
         @objects.push new Xaropinho gl, [-6.0, 0.0,-6.0]
         @objects.push new Xaropinho gl, [-9.0, 0.0,-12.0]
-        @objects.push new Xaropinho gl, [5.0, 0.0,12.0]
-        @objects.push new Xaropinho gl, [-8.0, 0.0,-4.0]
-        @objects.push new Xaropinho gl, [3.0, 0.0,7.0]
-        @objects.push new Xaropinho gl, [8.0, 0.0,-12.0]
         @objects.push new Explosion gl, [ 8.0, 0.0,-6.0]
-        @objects.push new Cenario gl
+        @cenario = new Cenario gl
 
         @player = new Player [0.0, 0.0, 0.0]
 
@@ -34,13 +30,14 @@ class window.Scene
         viewMatrix = @camera.getViewMatrix!
 
         # Render Scene Objects
+        @cenario.render viewMatrix, projectionMatrix
         for obj in @objects
             obj.render viewMatrix, projectionMatrix
 
         # Render Skybox
         @skybox.render viewMatrix, projectionMatrix
         # Render HUD
-        @hud.render viewMatrix
+        #@hud.render viewMatrix
 
     update: !->
         @camera.update!

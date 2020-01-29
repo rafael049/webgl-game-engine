@@ -32,8 +32,7 @@
     WeaponHud.prototype.update = function(){
       if (Input.onKeydown(70)) {
         this.sprite.playAnim("Shot", false);
-        AudioManager.playSound("tiro.mp3");
-        return console.log("Olha o tiro");
+        return AudioManager.playSound("tiro.mp3");
       }
     };
     return WeaponHud;

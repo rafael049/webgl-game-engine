@@ -21,7 +21,7 @@
       this.yaw = -90.0;
       this.pitch = 0.0;
       this.movSpeed = 0.1;
-      this.sensivity = 0.1;
+      this.sensivity = 1.5;
       this.fov = 35.0;
       this.znear = 0.1;
       this.zfar = 1000.0;
@@ -34,16 +34,16 @@
         vec3.add(this.pos, this.parent.pos, this.offset);
       }
       if (Input.keys[75]) {
-        this.pitch += 0.5;
+        this.pitch += this.sensivity;
       }
       if (Input.keys[74]) {
-        this.pitch -= 0.5;
+        this.pitch -= this.sensivity;
       }
       if (Input.keys[76]) {
-        this.yaw += 0.5;
+        this.yaw += this.sensivity;
       }
       if (Input.keys[72]) {
-        this.yaw -= 0.5;
+        this.yaw -= this.sensivity;
       }
       if (!this.parent) {
         if (Input.keys[87]) {
