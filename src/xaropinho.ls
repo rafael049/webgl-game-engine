@@ -13,4 +13,12 @@ class window.Xaropinho extends Enemy
 
     update: ->
         super!
-        @vel[0] = 0.1
+        playerPos = Message.get "playerPosition"
+        vel = []
+        vec3.sub(vel, playerPos, @pos)
+        if vec3.len(vel) > 5.0
+            vec3.normalize(vel, vel)
+            vec3.scale(vel, vel, 0.1)
+            @vel = vel
+        else
+            @vel = [0, 0, 0]

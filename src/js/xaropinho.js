@@ -13,8 +13,18 @@
       this.anim.yTiles = 1;
     }
     Xaropinho.prototype.update = function(){
+      var playerPos, vel;
       superclass.prototype.update.call(this);
-      return this.vel[0] = 0.1;
+      playerPos = Message.get("playerPosition");
+      vel = [];
+      vec3.sub(vel, playerPos, this.pos);
+      if (vec3.len(vel) > 5.0) {
+        vec3.normalize(vel, vel);
+        vec3.scale(vel, vel, 0.1);
+        return this.vel = vel;
+      } else {
+        return this.vel = [0, 0, 0];
+      }
     };
     return Xaropinho;
   }(Enemy));

@@ -16,6 +16,8 @@ class window.Player
         @readInput!
         @calcVel deltaTime
 
+        @sendMessages!
+
     updatePosition: !->
         vec3.add(@pos, @pos, @vel)
 
@@ -43,3 +45,5 @@ class window.Player
             @dir[0] += -1
 
         vec3.normalize @dir, @dir
+    sendMessages: ->
+        Message.send "playerPosition", @pos
