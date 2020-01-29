@@ -29,7 +29,7 @@ class window.Sprite extends GameObject
         @nextFrame!
 
     update: ->
-        1 == 1
+        return
 
     setShaderAnimation: !->
         @shader.setUniformInt("frame", @anim.curFrame)

@@ -28,9 +28,7 @@
       superclass.prototype.render.apply(this, arguments);
       return this.nextFrame();
     };
-    Sprite.prototype.update = function(){
-      return 1 === 1;
-    };
+    Sprite.prototype.update = function(){};
     Sprite.prototype.setShaderAnimation = function(){
       this.shader.setUniformInt("frame", this.anim.curFrame);
     };

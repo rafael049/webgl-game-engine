@@ -1,17 +1,16 @@
-class window.Xaropinho extends Sprite
+class window.Xaropinho extends Enemy
     (gl, pos) ->
         super(gl, pos)
         @name = "xaropinho"
 
         @texture = Resources.getTexture(gl, "xaropinho.png") #new Texture(gl, "paiJimmy.png")
-        @shader = Resources.getShader(gl, "sprite")
-        @mesh = Resources.getMesh(gl, "sprite1")
 
         @canCollide = true
-        @radius = 10.0
+        @radius = 1.0
 
         @anim.xTiles = 1
         @anim.yTiles = 1
 
     update: ->
-        @lookAtCamera!
+        super!
+        @vel[0] = 0.1

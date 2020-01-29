@@ -7,18 +7,17 @@
       Xaropinho.superclass.call(this, gl, pos);
       this.name = "xaropinho";
       this.texture = Resources.getTexture(gl, "xaropinho.png");
-      this.shader = Resources.getShader(gl, "sprite");
-      this.mesh = Resources.getMesh(gl, "sprite1");
       this.canCollide = true;
-      this.radius = 10.0;
+      this.radius = 1.0;
       this.anim.xTiles = 1;
       this.anim.yTiles = 1;
     }
     Xaropinho.prototype.update = function(){
-      return this.lookAtCamera();
+      superclass.prototype.update.call(this);
+      return this.vel[0] = 0.1;
     };
     return Xaropinho;
-  }(Sprite));
+  }(Enemy));
   function extend$(sub, sup){
     function fun(){} fun.prototype = (sub.superclass = sup).prototype;
     (sub.prototype = new fun).constructor = sub;
