@@ -37,7 +37,7 @@ class window.Scene
         # Render Skybox
         @skybox.render viewMatrix, projectionMatrix
         # Render HUD
-        #@hud.render viewMatrix
+        @hud.render viewMatrix
 
     update: !->
         @camera.update!
@@ -50,6 +50,4 @@ class window.Scene
         for obj in @objects
             obj.update!
 
-        if Input.keys[32]
-            AudioManager.playSound "rapaiz.mp3"
         @hud.update!

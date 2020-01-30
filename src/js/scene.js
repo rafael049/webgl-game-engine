@@ -34,6 +34,7 @@
         obj.render(viewMatrix, projectionMatrix);
       }
       this.skybox.render(viewMatrix, projectionMatrix);
+      this.hud.render(viewMatrix);
     };
     Scene.prototype.update = function(){
       var i$, ref$, len$, obj;
@@ -43,9 +44,6 @@
       for (i$ = 0, len$ = (ref$ = this.objects).length; i$ < len$; ++i$) {
         obj = ref$[i$];
         obj.update();
-      }
-      if (Input.keys[32]) {
-        AudioManager.playSound("rapaiz.mp3");
       }
       this.hud.update();
     };

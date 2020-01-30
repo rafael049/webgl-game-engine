@@ -8,17 +8,38 @@ class window.Xaropinho extends Enemy
         @canCollide = true
         @radius = 1.0
 
-        @anim.xTiles = 1
+        @anim.xTiles = 2
         @anim.yTiles = 1
+
+        # Define animations
+        @anim.anims["Idle"] = [0, 0]
+        @anim.anims["Hurt"] = [1, 1]
+        @anim.curAnim = "Idle"
 
     update: ->
         super!
-        playerPos = Message.get "playerPosition"
-        vel = []
-        vec3.sub(vel, playerPos, @pos)
-        if vec3.len(vel) > 5.0
+        switch @state
+        case "Idle"
+            @playAnim "Idle"
+            @vel = [0, 0, 0]
+
+            playerPos = Message.get "playerPosition"
+            dist = []
+            vec3.sub(dist, playerPos, @pos)
+            if vec3.len(dist) > 5.0
+                @state = "Attack"
+        case "Hurt"
+            @vel = [0, 0, 0]
+            @playAnim "Hurt"
+            if @wait "hurt_time", 100
+                @state = "Idle"
+        case "Attack"
+            playerPos = Message.get "playerPosition"
+            vel = []
+            vec3.sub(vel, playerPos, @pos)
+
+            @playAnim "Idle"
+
             vec3.normalize(vel, vel)
             vec3.scale(vel, vel, 0.1)
             @vel = vel
-        else
-            @vel = [0, 0, 0]

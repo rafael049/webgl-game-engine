@@ -1,3 +1,123 @@
+class window.Collision
+    X_BOUNDS = 24.0
+    Y_BOUNDS = 15.0
+    @objs = []
+
+    @check = (objs, player) ->
+        @objs = objs
+
+        player.collidingWith = []
+        @checkBounds player
+
+        for obj in objs
+            @checkBounds obj
+
+        quad = new Quad(-X_BOUNDS, -Y_BOUNDS, 2*X_BOUNDS, 2*Y_BOUNDS)
+        quadTree = new QuadTree objs.concat(player), quad
+
+        @checkCollisionFromTree quadTree
+
+
+    @checkBounds = (obj) ->
+        x = obj.pos[0]
+        y = obj.pos[2]
+        vx = obj.vel[0]
+        vy = obj.vel[2]
+
+        _x = x + vx # next x position
+        _y = y + vy # next y position
+
+        if Math.abs(_x) > X_BOUNDS
+            obj.vel[0] = 0
+
+        if Math.abs(_y) > Y_BOUNDS
+            obj.vel[2] = 0
+
+        if x > X_BOUNDS
+            obj.pos[0] = X_BOUNDS
+        else if x < -X_BOUNDS
+            obj.pos[0] = -X_BOUNDS
+        if y > X_BOUNDS
+            obj.pos[2] = Y_BOUNDS
+        else if y < -Y_BOUNDS
+            obj.pos[2] = -Y_BOUNDS
+
+
+    @checkCollisionFromTree = (quadTree) ->
+        if not quadTree
+            return
+
+        for i from 0 til quadTree.objs.length
+
+            curObj = quadTree.objs.pop!
+            otherObjs = @getTreeElements quadTree
+
+            for otherObj in otherObjs
+                @checkCollision curObj, otherObj
+
+        @checkCollisionFromTree quadTree.node1
+        @checkCollisionFromTree quadTree.node2
+        @checkCollisionFromTree quadTree.node3
+        @checkCollisionFromTree quadTree.node4
+
+
+    @checkCollision = (obj1, obj2) ->
+        x1 = obj1.pos[0] + obj1.vel[0]
+        y1 = obj1.pos[2] + obj1.vel[2]
+
+        x2 = obj2.pos[0] + obj2.vel[0]
+        y2 = obj2.pos[2] + obj2.vel[2]
+
+        if Math.sqrt( (x1 - x2)^2 + (y1 - y2)^2 ) < (obj1.radius + obj2.radius)
+            normal = vec3.create!
+            vec3.sub(normal, obj2.pos, obj1.pos) # vetor do obj1 para obj2
+            vec3.normalize(normal, normal)
+
+            dot1 = vec3.dot(obj1.vel, normal)
+            dot2 = vec3.dot(obj2.vel, normal)
+
+            cancelVel1 = []
+            vec3.scale(cancelVel1, normal, dot1)
+            cancelVel2 = []
+            vec3.scale(cancelVel2, normal, dot2)
+
+            vec3.sub(obj1.pos, obj1.pos, cancelVel1)
+            vec3.sub(obj2.pos, obj2.pos, cancelVel2)
+
+
+
+    @getTreeElements = (quadTree) ->
+        if not quadTree
+            []
+        else
+            quadTree.objs ++
+            @getTreeElements(quadTree.node1) ++
+            @getTreeElements(quadTree.node2) ++
+            @getTreeElements(quadTree.node3) ++
+            @getTreeElements(quadTree.node4)
+
+    @raycast = (origin, dir, n) ->
+        caughtObjs = []
+        for obj in @objs
+            dist = @distFromStraight origin, dir, obj
+
+            if dist < obj.radius
+                if obj.playAnim
+                    obj.state = "Hurt"
+
+    @distFromStraight = (origin, dir, obj) ->
+        sub = []
+        vec3.sub(sub, obj.pos, origin)
+        cross = []
+        vec3.cross(cross, dir, sub)
+        len1 = vec3.len(cross)
+        len2 = vec3.len(dir)
+
+        len1/len2
+
+
+
+
 class Quad
     (x, y, w, h) ->
         @x = x
@@ -96,109 +216,6 @@ class QuadTree
 
 
 
-class window.Collision
-    X_BOUNDS = 24.0
-    Y_BOUNDS = 15.0
-    @check = (objs, player) ->
-        player.collidingWith = []
-        @checkBounds player
-
-        for obj in objs
-            @checkBounds obj
-
-        quad = new Quad(-X_BOUNDS, -Y_BOUNDS, 2*X_BOUNDS, 2*Y_BOUNDS)
-        quadTree = new QuadTree objs.concat(player), quad
-
-        @checkCollisionFromTree quadTree
-
-
-    @checkBounds = (obj) ->
-        x = obj.pos[0]
-        y = obj.pos[2]
-        vx = obj.vel[0]
-        vy = obj.vel[2]
-
-        _x = x + vx # next x position
-        _y = y + vy # next y position
-
-        if Math.abs(_x) > X_BOUNDS
-            obj.vel[0] = 0
-
-        if Math.abs(_y) > Y_BOUNDS
-            obj.vel[2] = 0
-
-        if x > X_BOUNDS
-            obj.pos[0] = X_BOUNDS
-        else if x < -X_BOUNDS
-            obj.pos[0] = -X_BOUNDS
-        if y > X_BOUNDS
-            obj.pos[2] = Y_BOUNDS
-        else if y < -Y_BOUNDS
-            obj.pos[2] = -Y_BOUNDS
-
-
-    @checkCollisionFromTree = (quadTree) ->
-        if not quadTree
-            return
-
-        for i from 0 til quadTree.objs.length
-
-            curObj = quadTree.objs.pop!
-            otherObjs = @getTreeElements quadTree
-
-            for otherObj in otherObjs
-                @checkCollision curObj, otherObj
-
-        @checkCollisionFromTree quadTree.node1
-        @checkCollisionFromTree quadTree.node2
-        @checkCollisionFromTree quadTree.node3
-        @checkCollisionFromTree quadTree.node4
-
-
-    @checkCollision = (obj1, obj2) ->
-        x1 = obj1.pos[0] + obj1.vel[0]
-        y1 = obj1.pos[2] + obj1.vel[2]
-
-        x2 = obj2.pos[0] + obj2.vel[0]
-        y2 = obj2.pos[2] + obj2.vel[2]
-
-        if Math.sqrt( (x1 - x2)^2 + (y1 - y2)^2 ) < (obj1.radius + obj2.radius)
-            normal = vec3.create!
-            vec3.sub(normal, obj2.pos, obj1.pos) # vetor do obj1 para obj2
-            vec3.normalize(normal, normal)
-
-            dot1 = vec3.dot(obj1.vel, normal)
-            dot2 = vec3.dot(obj2.vel, normal)
-
-            cancelVel1 = []
-            vec3.scale(cancelVel1, normal, dot1)
-            cancelVel2 = []
-            vec3.scale(cancelVel2, normal, dot2)
-
-            vec3.sub(obj1.pos, obj1.pos, cancelVel1)
-            vec3.sub(obj2.pos, obj2.pos, cancelVel2)
-
-
-
-    @getTreeElements = (quadTree) ->
-        if not quadTree
-            []
-        else
-            quadTree.objs ++
-            @getTreeElements(quadTree.node1) ++
-            @getTreeElements(quadTree.node2) ++
-            @getTreeElements(quadTree.node3) ++
-            @getTreeElements(quadTree.node4)
-
-    @getTreeSize = (quadTree) ->
-        if not quadTree
-            0
-        else
-            node1 = quadTree.node1
-            node2 = quadTree.node2
-            node3 = quadTree.node3
-            node4 = quadTree.node4
-            quadTree.objs.length + @getTreeSize(node1) + @getTreeSize(node2) + @getTreeSize(node3) + @getTreeSize(node4)
 
 
 

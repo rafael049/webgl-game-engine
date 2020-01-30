@@ -9,21 +9,41 @@
       this.texture = Resources.getTexture(gl, "xaropinho.png");
       this.canCollide = true;
       this.radius = 1.0;
-      this.anim.xTiles = 1;
+      this.anim.xTiles = 2;
       this.anim.yTiles = 1;
+      this.anim.anims["Idle"] = [0, 0];
+      this.anim.anims["Hurt"] = [1, 1];
+      this.anim.curAnim = "Idle";
     }
     Xaropinho.prototype.update = function(){
-      var playerPos, vel;
+      var playerPos, dist, vel;
       superclass.prototype.update.call(this);
-      playerPos = Message.get("playerPosition");
-      vel = [];
-      vec3.sub(vel, playerPos, this.pos);
-      if (vec3.len(vel) > 5.0) {
+      switch (this.state) {
+      case "Idle":
+        this.playAnim("Idle");
+        this.vel = [0, 0, 0];
+        playerPos = Message.get("playerPosition");
+        dist = [];
+        vec3.sub(dist, playerPos, this.pos);
+        if (vec3.len(dist) > 5.0) {
+          return this.state = "Attack";
+        }
+        break;
+      case "Hurt":
+        this.vel = [0, 0, 0];
+        this.playAnim("Hurt");
+        if (this.wait("hurt_time", 100)) {
+          return this.state = "Idle";
+        }
+        break;
+      case "Attack":
+        playerPos = Message.get("playerPosition");
+        vel = [];
+        vec3.sub(vel, playerPos, this.pos);
+        this.playAnim("Idle");
         vec3.normalize(vel, vel);
         vec3.scale(vel, vel, 0.1);
         return this.vel = vel;
-      } else {
-        return this.vel = [0, 0, 0];
       }
     };
     return Xaropinho;
