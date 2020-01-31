@@ -1,17 +1,22 @@
 class window.Scene
     (gl) ->
         @gl = gl
-        @objects = []
-        @objects.push new Xaropinho gl, [-6.0, 0.0,-6.0]
-        @objects.push new Xaropinho gl, [ 6.0, 0.0,-6.0]
-        @objects.push new Explosion gl, [ 8.0, 0.0,-6.0]
+        @objects = new LinkedList!
+            #@objects.add new Explosion gl, [ 8.0, 0.0,-6.0]
+        @objects.add new Xaropinho gl, [-6.0, 1.0,-6.0]
+        @objects.add new Xaropinho gl, [ 6.0, 1.0,-6.0]
+        @objects.add new Xaropinho gl, [ 6.0, 1.0, 6.0]
+        @objects.add new Xaropinho gl, [-8.0, 1.0,-6.0]
+        #@objects.add new Xaropinho gl, [ 6.0, 0.0,-6.0]
+        #@objects.add new Xaropinho gl, [ 6.0, 0.0, 6.0]
+
         @cenario = new Cenario gl
 
-        @player = new Player [0.0, 0.0, 0.0]
+        @player = new Player [0.0, 1.0, 0.0]
 
         @input = new Input
-        @camera = new Camera @gl, [0.0, 2.0, 0.0], @player
-        @camera.pos = [0.0, 2.0, 12.0]
+        @camera = new Camera @gl, [0.0, 1.0, 0.0], @player
+        @camera.pos = [0.0, 0.0, 0.0]
         @audio = new AudioManager
         @skybox = new Skybox @gl
 
@@ -31,8 +36,11 @@ class window.Scene
 
         # Render Scene Objects
         @cenario.render viewMatrix, projectionMatrix
-        for obj in @objects
-            obj.render viewMatrix, projectionMatrix
+
+        @objects.each(
+            (obj, l) ->
+                obj.data.render viewMatrix, projectionMatrix
+        )
 
         # Render Skybox
         @skybox.render viewMatrix, projectionMatrix
@@ -45,9 +53,44 @@ class window.Scene
         @player.update 1.0
 
         # Get current vel and pos from objs and check collision
-        Collision.check @objects, @player
+        # @ Update Collision system to use linked list
+        Collision.check @objects.toArray!, @player
 
-        for obj in @objects
-            obj.update!
+        #@objects.each(
+        #    (node, l) ->
+        #        if node.data.trash
+        #            l.remove node
+        #            return false
+        #        else
+        #            node.data.update!
+        #            return true
+        #)
+
+        # Go through the object list updating them and removing
+        # the unused objects ( The list method "each()" doesnt work )
+        current = @objects.head
+        while current != null
+            # update current object
+            current.data.update!
+
+            # Verify if the obj is ready for deletetion
+            if current.data.trash
+                # if the current object is the head
+                if current == @objects.head
+                    # if the list has one element
+                    if current.next == current.prev
+                        @objects.head = null
+                        current.next = null
+                    else
+                        @objects.head = current.next
+                        current.prev.next = current.next
+                        current.next.prev = current.prev
+                else
+                    current.prev.next = current.next
+                    current.next.prev = current.prev
+
+            current = current.next
+            if current == @objects.head
+                current = null
 
         @hud.update!

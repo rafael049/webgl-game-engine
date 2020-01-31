@@ -5,7 +5,7 @@
     WeaponHud.displayName = 'WeaponHud';
     var prototype = WeaponHud.prototype, constructor = WeaponHud;
     function WeaponHud(gl){
-      this.sprite = new SpriteHUD(gl, [1.2, -2.1, -0.1]);
+      this.sprite = new SpriteHUD(gl, [1.2, -1.1, -0.1]);
     }
     WeaponHud.prototype.render = function(projectionMatrix){
       return this.sprite.render(projectionMatrix);

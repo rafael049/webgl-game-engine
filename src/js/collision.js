@@ -99,7 +99,8 @@
         dist = this.distFromStraight(origin, dir, obj);
         if (dist < obj.radius) {
           if (obj.playAnim) {
-            results$.push(obj.state = "Hurt");
+            obj.state = "Hurt";
+            results$.push(obj.health -= 5.0);
           }
         }
       }

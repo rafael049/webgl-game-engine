@@ -104,6 +104,7 @@ class window.Collision
             if dist < obj.radius
                 if obj.playAnim
                     obj.state = "Hurt"
+                    obj.health -= 5.0
 
     @distFromStraight = (origin, dir, obj) ->
         sub = []

@@ -15,6 +15,7 @@
       this.modelViewMat = mat4.create();
       this.canCollide = false;
       this.collidingWith = [];
+      this.trash = false;
     }
     GameObject.prototype.render = function(viewMatrix, projectionMatrix){
       var modelMatrix, localMatrix;

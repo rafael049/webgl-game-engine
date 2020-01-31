@@ -15,6 +15,8 @@ class window.GameObject # Object is a reserved word
         @canCollide = false
         @collidingWith = []
 
+        @trash = false  # Can be removed from scene?
+
     render: (viewMatrix, projectionMatrix) ->
 
         modelMatrix = mat4.create!

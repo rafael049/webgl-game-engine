@@ -18,6 +18,7 @@ class window.Xaropinho extends Enemy
 
     update: ->
         super!
+
         switch @state
         case "Idle"
             @playAnim "Idle"
@@ -29,10 +30,15 @@ class window.Xaropinho extends Enemy
             if vec3.len(dist) > 5.0
                 @state = "Attack"
         case "Hurt"
+            console.log @health
             @vel = [0, 0, 0]
             @playAnim "Hurt"
+
             if @wait "hurt_time", 100
-                @state = "Idle"
+                if @health <= 0
+                    @state = "Dead"
+                else
+                    @state = "Idle"
         case "Attack"
             playerPos = Message.get "playerPosition"
             vel = []
@@ -43,3 +49,7 @@ class window.Xaropinho extends Enemy
             vec3.normalize(vel, vel)
             vec3.scale(vel, vel, 0.1)
             @vel = vel
+        case "Dead"
+            @vel = [0, 0.0, 0]
+            if @wait "garbage", 500
+                @trash = true

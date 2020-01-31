@@ -1,6 +1,6 @@
 class window.WeaponHud
     (gl) ->
-        @sprite = new SpriteHUD gl, [1.2, -2.1, -0.1]
+        @sprite = new SpriteHUD gl, [1.2, -1.1, -0.1]
 
     render: (projectionMatrix) ->
         @sprite.render projectionMatrix

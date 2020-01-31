@@ -30,10 +30,15 @@
         }
         break;
       case "Hurt":
+        console.log(this.health);
         this.vel = [0, 0, 0];
         this.playAnim("Hurt");
         if (this.wait("hurt_time", 100)) {
-          return this.state = "Idle";
+          if (this.health <= 0) {
+            return this.state = "Dead";
+          } else {
+            return this.state = "Idle";
+          }
         }
         break;
       case "Attack":
@@ -44,6 +49,11 @@
         vec3.normalize(vel, vel);
         vec3.scale(vel, vel, 0.1);
         return this.vel = vel;
+      case "Dead":
+        this.vel = [0, 0.0, 0];
+        if (this.wait("garbage", 500)) {
+          return this.trash = true;
+        }
       }
     };
     return Xaropinho;

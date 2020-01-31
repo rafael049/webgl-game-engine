@@ -14,6 +14,7 @@
       this.anim.yTiles = 1;
       this.state = "Iddle";
       this.timers = [];
+      this.health = 10.0;
     }
     Enemy.prototype.update = function(){
       this.lookAtCamera();
