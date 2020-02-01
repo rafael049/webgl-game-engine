@@ -4,15 +4,21 @@
   window.HUD = HUD = (function(){
     HUD.displayName = 'HUD';
     var prototype = HUD.prototype, constructor = HUD;
+    HUD.damageScreen = void 8;
     function HUD(gl){
       this.gl = gl;
+      constructor.damageScreen = document.getElementById("damageScreen");
       this.weapon = new WeaponHud(gl);
     }
     HUD.prototype.render = function(){
       var orthoProjectionMatrix;
       orthoProjectionMatrix = mat4.create();
       mat4.ortho(orthoProjectionMatrix, -2.0, 2.0, -2.0, 2.0, 0.1, 5.0);
-      return this.weapon.render(orthoProjectionMatrix);
+      if (!Message.get("isPlayerDead")) {
+        return this.weapon.render(orthoProjectionMatrix);
+      } else {
+        return constructor.damageScreen.style.opacity = 0.25;
+      }
     };
     HUD.prototype.update = function(){
       return this.weapon.update();

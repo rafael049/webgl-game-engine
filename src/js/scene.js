@@ -12,10 +12,8 @@
       this.objects.add(new Xaropinho(gl, [6.0, 1.0, 6.0]));
       this.objects.add(new Xaropinho(gl, [-8.0, 1.0, -6.0]));
       this.cenario = new Cenario(gl);
-      this.player = new Player([0.0, 1.0, 0.0]);
+      this.player = new Player(gl, [0.0, 1.0, 0.0]);
       this.input = new Input;
-      this.camera = new Camera(this.gl, [0.0, 1.0, 0.0], this.player);
-      this.camera.pos = [0.0, 0.0, 0.0];
       this.audio = new AudioManager;
       this.skybox = new Skybox(this.gl);
       this.hud = new HUD(gl);
@@ -27,8 +25,8 @@
     Scene.prototype.render = function(){
       var projectionMatrix, viewMatrix;
       this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-      projectionMatrix = this.camera.getProjectionMatrix();
-      viewMatrix = this.camera.getViewMatrix();
+      projectionMatrix = this.player.camera.getProjectionMatrix();
+      viewMatrix = this.player.camera.getViewMatrix();
       this.cenario.render(viewMatrix, projectionMatrix);
       this.objects.each(function(obj, l){
         return obj.data.render(viewMatrix, projectionMatrix);
@@ -38,7 +36,6 @@
     };
     Scene.prototype.update = function(){
       var current;
-      this.camera.update();
       this.player.update(1.0);
       Collision.check(this.objects.toArray(), this.player);
       current = this.objects.head;

@@ -8,12 +8,13 @@ class window.Xaropinho extends Enemy
         @canCollide = true
         @radius = 1.0
 
-        @anim.xTiles = 2
+        @anim.xTiles = 5
         @anim.yTiles = 1
 
         # Define animations
         @anim.anims["Idle"] = [0, 0]
         @anim.anims["Hurt"] = [1, 1]
+        @anim.anims["Attack"] = [2, 4]
         @anim.curAnim = "Idle"
 
     update: ->
@@ -41,15 +42,19 @@ class window.Xaropinho extends Enemy
                     @state = "Idle"
         case "Attack"
             playerPos = Message.get "playerPosition"
+            player = Message.get "playerRef"
             vel = []
             vec3.sub(vel, playerPos, @pos)
 
-            @playAnim "Idle"
+            if @wait "Attack_interval", 1000
+                @playAnim "Attack", false
+                player.damage 10
 
             vec3.normalize(vel, vel)
             vec3.scale(vel, vel, 0.1)
             @vel = vel
         case "Dead"
-            @vel = [0, 0.0, 0]
+            @vel = [0, 0, 0]
+            AudioManager.playSound "rapaiz.mp3"
             if @wait "garbage", 500
                 @trash = true

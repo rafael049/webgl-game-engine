@@ -5,18 +5,41 @@
     Player.displayName = 'Player';
     var MAX_VEL, prototype = Player.prototype, constructor = Player;
     MAX_VEL = 0.2;
-    function Player(pos){
+    function Player(gl, pos){
       this.pos = pos;
       this.vel = [0.0, 0.0, 0.0];
       this.dir = [0.0, 0.0, 0.0];
       this.radius = 1.0;
       this.height = 2.0;
       this.collidingWith = [];
+      this.camera = new Camera(gl, [0.0, 0.0, 0.0], this);
+      this.state = "Normal";
+      this.timers = [];
+      this.health = 100;
+      this.dead = false;
     }
     Player.prototype.update = function(deltaTime){
-      this.updatePosition();
-      this.readInput();
-      this.calcVel(deltaTime);
+      switch (this.state) {
+      case "Normal":
+        this.camera.update();
+        this.updatePosition();
+        this.readInput();
+        this.calcVel(deltaTime);
+        if (this.takingDamage) {
+          if (HUD.damageScreen.style.opacity > 0.05) {
+            HUD.damageScreen.style.opacity -= 0.05;
+          } else {
+            HUD.damageScreen.style.opacity = 0.0;
+          }
+        }
+        break;
+      case "Dead":
+        this.dead = true;
+        this.camera.deadView();
+        if (this.wait("risada_delay", 2000)) {
+          AudioManager.playSound("peludao.opus");
+        }
+      }
       return this.sendMessages();
     };
     Player.prototype.updatePosition = function(){
@@ -48,8 +71,34 @@
       }
       vec3.normalize(this.dir, this.dir);
     };
+    Player.prototype.damage = function(value){
+      this.health -= value;
+      HUD.damageScreen.style.opacity = 0.25;
+      this.takingDamage = true;
+      if (this.health < 0) {
+        return this.state = "Dead";
+      }
+    };
     Player.prototype.sendMessages = function(){
-      return Message.send("playerPosition", this.pos);
+      Message.send("playerPosition", this.pos);
+      Message.send("playerRef", this);
+      return Message.send("isPlayerDead", this.dead);
+    };
+    Player.prototype.wait = function(name, time){
+      var now, end;
+      now = Date.now();
+      end = now + time;
+      if (this.timers[name]) {
+        if (now > this.timers[name]) {
+          delete this.timers[name];
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        this.timers[name] = end;
+        return false;
+      }
     };
     return Player;
   }());

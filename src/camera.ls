@@ -4,17 +4,15 @@ class window.Camera
         @pos = pos
         @parent = parent
 
-        @offset = [0.0, 0.0, 0.0] # Offset from parent
-        if parent
-            @offset = pos
+        @offset = [0.0, 1.0, 0.0] # Offset from parent
 
         @front = vec3.create!
         @up = vec3.create!
         @right = vec3.create!
         @worldUp = vec3.fromValues(0.0, 1.0, 0.0)
 
-        @yaw = -90.0
-        @pitch = 0.0
+        @yaw = -90.0    # degrees
+        @pitch = 0.0    # degrees
         @movSpeed = 0.1
         @sensivity = 1.5
 
@@ -94,3 +92,8 @@ class window.Camera
             100.0, #z far
         )
         projectionMatrix
+
+    deadView: !->
+        if @pitch < 45
+            @pitch += (46 - @pitch)/25
+            @pos[1] -= 0.02

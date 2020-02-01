@@ -12,11 +12,9 @@ class window.Scene
 
         @cenario = new Cenario gl
 
-        @player = new Player [0.0, 1.0, 0.0]
+        @player = new Player gl, [0.0, 1.0, 0.0]
 
         @input = new Input
-        @camera = new Camera @gl, [0.0, 1.0, 0.0], @player
-        @camera.pos = [0.0, 0.0, 0.0]
         @audio = new AudioManager
         @skybox = new Skybox @gl
 
@@ -31,8 +29,8 @@ class window.Scene
     render: !->
         @gl.clear (@gl.COLOR_BUFFER_BIT .|. @gl.DEPTH_BUFFER_BIT)
 
-        projectionMatrix = @camera.getProjectionMatrix!
-        viewMatrix = @camera.getViewMatrix!
+        projectionMatrix = @player.camera.getProjectionMatrix!
+        viewMatrix = @player.camera.getViewMatrix!
 
         # Render Scene Objects
         @cenario.render viewMatrix, projectionMatrix
@@ -48,23 +46,12 @@ class window.Scene
         @hud.render viewMatrix
 
     update: !->
-        @camera.update!
 
         @player.update 1.0
 
         # Get current vel and pos from objs and check collision
         # @ Update Collision system to use linked list
         Collision.check @objects.toArray!, @player
-
-        #@objects.each(
-        #    (node, l) ->
-        #        if node.data.trash
-        #            l.remove node
-        #            return false
-        #        else
-        #            node.data.update!
-        #            return true
-        #)
 
         # Go through the object list updating them and removing
         # the unused objects ( The list method "each()" doesnt work )

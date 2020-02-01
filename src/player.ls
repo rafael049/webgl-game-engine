@@ -1,6 +1,6 @@
 class window.Player
     MAX_VEL = 0.2
-    (pos) ->
+    (gl, pos) ->
         @pos      = pos
         @vel      = [0.0, 0.0, 0.0]      # World Velocity
         @dir      = [0.0, 0.0, 0.0]      # Local direction
@@ -9,12 +9,33 @@ class window.Player
 
         @collidingWith = []
 
+        @camera = new Camera gl, [0.0, 0.0, 0.0], this
+
+        @state = "Normal"
+
+        @timers = []
+
+        @health = 100
+        @dead = false
+
     update: (deltaTime) ->
+        switch @state
+        case "Normal"
+            @camera.update!
+            @updatePosition!
+            @readInput!
+            @calcVel deltaTime
+            if @takingDamage
+                if HUD.damageScreen.style.opacity > 0.05
+                    HUD.damageScreen.style.opacity -= 0.05
+                else
+                    HUD.damageScreen.style.opacity = 0.0
 
-        @updatePosition!
-
-        @readInput!
-        @calcVel deltaTime
+        case "Dead"
+            @dead = true
+            @camera.deadView!
+            if @wait "risada_delay", 2000
+                AudioManager.playSound "peludao.opus"
 
         @sendMessages!
 
@@ -45,5 +66,29 @@ class window.Player
             @dir[0] += -1
 
         vec3.normalize @dir, @dir
+    damage: (value) ->
+        @health -= value
+        HUD.damageScreen.style.opacity = 0.25
+        @takingDamage = true
+        if @health < 0
+            @state = "Dead"
+
     sendMessages: ->
         Message.send "playerPosition", @pos
+        Message.send "playerRef", this
+        Message.send "isPlayerDead", @dead
+
+    wait: (name, time) ->
+        now = Date.now!
+        end = now + time
+
+        if @timers[name]
+            if now > @timers[name]
+                delete @timers[name]
+                true
+            else
+                false
+
+        else
+            @timers[name] = end
+            false

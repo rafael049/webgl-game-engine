@@ -9,14 +9,15 @@
       this.texture = Resources.getTexture(gl, "xaropinho.png");
       this.canCollide = true;
       this.radius = 1.0;
-      this.anim.xTiles = 2;
+      this.anim.xTiles = 5;
       this.anim.yTiles = 1;
       this.anim.anims["Idle"] = [0, 0];
       this.anim.anims["Hurt"] = [1, 1];
+      this.anim.anims["Attack"] = [2, 4];
       this.anim.curAnim = "Idle";
     }
     Xaropinho.prototype.update = function(){
-      var playerPos, dist, vel;
+      var playerPos, dist, player, vel;
       superclass.prototype.update.call(this);
       switch (this.state) {
       case "Idle":
@@ -43,14 +44,19 @@
         break;
       case "Attack":
         playerPos = Message.get("playerPosition");
+        player = Message.get("playerRef");
         vel = [];
         vec3.sub(vel, playerPos, this.pos);
-        this.playAnim("Idle");
+        if (this.wait("Attack_interval", 1000)) {
+          this.playAnim("Attack", false);
+          player.damage(10);
+        }
         vec3.normalize(vel, vel);
         vec3.scale(vel, vel, 0.1);
         return this.vel = vel;
       case "Dead":
-        this.vel = [0, 0.0, 0];
+        this.vel = [0, 0, 0];
+        AudioManager.playSound("rapaiz.mp3");
         if (this.wait("garbage", 500)) {
           return this.trash = true;
         }

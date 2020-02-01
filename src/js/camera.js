@@ -10,10 +10,7 @@
       this.gl = gl;
       this.pos = pos;
       this.parent = parent;
-      this.offset = [0.0, 0.0, 0.0];
-      if (parent) {
-        this.offset = pos;
-      }
+      this.offset = [0.0, 1.0, 0.0];
       this.front = vec3.create();
       this.up = vec3.create();
       this.right = vec3.create();
@@ -90,6 +87,15 @@
       projectionMatrix = mat4.create();
       mat4.perspective(projectionMatrix, 45 * Math.PI / 180, this.gl.viewportWidth / this.gl.viewportHeight, 0.1, 100.0);
       return projectionMatrix;
+    };
+    Camera.prototype.deadView = function(){
+      var damageScreen;
+      if (this.pitch < 45) {
+        this.pitch += (46 - this.pitch) / 25;
+        this.pos[1] -= 0.02;
+      }
+      damageScreen = document.getElementById("damageScreen");
+      damageScreen.opacity = 0.25;
     };
     return Camera;
   }());
