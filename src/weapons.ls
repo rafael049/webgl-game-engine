@@ -1,15 +1,45 @@
 class window.WeaponHud
     (gl) ->
-        @sprite = new SpriteHUD gl, [1.2, -1.1, -0.1]
+        @currentWeapon = "cacetete"
+        @weapons =
+            pistol:
+                sprite: new PistolSprite gl
+                sound: "tiro.mp3"
+                type: "fire"
+                firerate: 1.0
+                damage: 1.0
+            cacetete:
+                sprite: new CaceteteSprite gl
+                sound: "batSwing.mp3"
+                type: "meelee"
+                firerate: 1.0
+                damage: 1.0
 
     render: (projectionMatrix) ->
-        @sprite.render projectionMatrix
+        @weapons[@currentWeapon].sprite.render projectionMatrix
 
     update: ->
+        currentWeapon = @weapons[@currentWeapon]
+
         if Input.onKeydown(70)
-            @sprite.playAnim "Shot", false
-            AudioManager.playSound "tiro.mp3"
+            currentWeapon.sprite.playAnim "Shot", false
+            AudioManager.playSound currentWeapon.sound
 
             cameraPos = Message.get "cameraPosition"
             cameraDir = Message.get "cameraFrontVec"
-            Collision.raycast cameraPos, cameraDir, 1
+            if currentWeapon.type == "fire"
+                obj = Collision.raycast cameraPos, cameraDir, 100.0
+                console.log obj
+                if obj
+                    obj.state = "Hurt"
+                    obj.health -= 5.0
+            else if currentWeapon.type == "meelee"
+                obj = Collision.raycast cameraPos, cameraDir, 4.0
+                if obj
+                    obj.state = "Hurt"
+                    obj.health -= 5.0
+
+        if Input.onKeydown(49)
+            @currentWeapon = "cacetete"
+        if Input.onKeydown(50)
+            @currentWeapon = "pistol"

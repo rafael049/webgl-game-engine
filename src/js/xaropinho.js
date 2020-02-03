@@ -15,6 +15,7 @@
       this.anim.anims["Hurt"] = [1, 1];
       this.anim.anims["Attack"] = [2, 4];
       this.anim.curAnim = "Idle";
+      this.state = "Idle";
     }
     Xaropinho.prototype.update = function(){
       var playerPos, dist, player, vel;
@@ -26,34 +27,50 @@
         playerPos = Message.get("playerPosition");
         dist = [];
         vec3.sub(dist, playerPos, this.pos);
-        if (vec3.len(dist) > 5.0) {
-          return this.state = "Attack";
+        if (vec3.len(dist) < 10.0) {
+          return this.state = "Seek";
         }
         break;
       case "Hurt":
-        console.log(this.health);
         this.vel = [0, 0, 0];
         this.playAnim("Hurt");
         if (this.wait("hurt_time", 100)) {
           if (this.health <= 0) {
             return this.state = "Dead";
           } else {
-            return this.state = "Idle";
+            return this.state = "Seek";
           }
         }
         break;
-      case "Attack":
+      case "Seek":
         playerPos = Message.get("playerPosition");
         player = Message.get("playerRef");
-        vel = [];
-        vec3.sub(vel, playerPos, this.pos);
+        this.playAnim("Idle");
+        dist = [];
+        vec3.sub(dist, playerPos, this.pos);
+        if (vec3.len(dist) < 3.0) {
+          return this.state = "Attack";
+        } else {
+          vel = [];
+          vec3.sub(vel, playerPos, this.pos);
+          vec3.normalize(vel, vel);
+          vec3.scale(vel, vel, 0.1);
+          return this.vel = vel;
+        }
+      case "Attack":
+        player = Message.get("playerRef");
+        this.vel = [0, 0, 0];
+        dist = [];
+        vec3.sub(dist, player.pos, this.pos);
+        if (vec3.len(dist) > 3.0) {
+          this.state = "Seek";
+        }
         if (this.wait("Attack_interval", 1000)) {
           this.playAnim("Attack", false);
           player.damage(10);
+          return this.state = "Seek";
         }
-        vec3.normalize(vel, vel);
-        vec3.scale(vel, vel, 0.1);
-        return this.vel = vel;
+        break;
       case "Dead":
         this.vel = [0, 0, 0];
         AudioManager.playSound("rapaiz.mp3");

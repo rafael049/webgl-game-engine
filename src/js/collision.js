@@ -91,20 +91,30 @@
         return quadTree.objs.concat(this.getTreeElements(quadTree.node1), this.getTreeElements(quadTree.node2), this.getTreeElements(quadTree.node3), this.getTreeElements(quadTree.node4));
       }
     };
-    Collision.raycast = function(origin, dir, n){
-      var caughtObjs, i$, ref$, len$, obj, dist, results$ = [];
-      caughtObjs = [];
+    Collision.raycast = function(origin, dir, length){
+      var caughtObj, minProj, i$, ref$, len$, obj, originDist, proj, cross, len1, len2, dist;
+      caughtObj = null;
+      minProj = 65535;
       for (i$ = 0, len$ = (ref$ = this.objs).length; i$ < len$; ++i$) {
         obj = ref$[i$];
-        dist = this.distFromStraight(origin, dir, obj);
-        if (dist < obj.radius) {
-          if (obj.playAnim) {
-            obj.state = "Hurt";
-            results$.push(obj.health -= 5.0);
+        originDist = [];
+        vec3.sub(originDist, obj.pos, origin);
+        proj = vec3.dot(originDist, dir);
+        if (proj < length && proj > 0.0) {
+          cross = [];
+          vec3.cross(cross, dir, originDist);
+          len1 = vec3.len(cross);
+          len2 = vec3.len(dir);
+          dist = len1 / len2;
+          if (dist < obj.radius) {
+            if (proj < minProj) {
+              caughtObj = obj;
+              minProj = proj;
+            }
           }
         }
       }
-      return results$;
+      return caughtObj;
     };
     Collision.distFromStraight = function(origin, dir, obj){
       var sub, cross, len1, len2;

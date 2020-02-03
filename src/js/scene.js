@@ -7,6 +7,7 @@
     function Scene(gl){
       this.gl = gl;
       this.objects = new LinkedList();
+      this.objects.add(new Explosion(gl, [8.0, 0.0, -6.0]));
       this.objects.add(new Xaropinho(gl, [-6.0, 1.0, -6.0]));
       this.objects.add(new Xaropinho(gl, [6.0, 1.0, -6.0]));
       this.objects.add(new Xaropinho(gl, [6.0, 1.0, 6.0]));

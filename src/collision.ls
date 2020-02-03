@@ -96,15 +96,29 @@ class window.Collision
             @getTreeElements(quadTree.node3) ++
             @getTreeElements(quadTree.node4)
 
-    @raycast = (origin, dir, n) ->
-        caughtObjs = []
+    @raycast = (origin, dir, length) ->
+        caughtObj = null
+        minProj = 65535
         for obj in @objs
-            dist = @distFromStraight origin, dir, obj
 
-            if dist < obj.radius
-                if obj.playAnim
-                    obj.state = "Hurt"
-                    obj.health -= 5.0
+            originDist = []
+            vec3.sub(originDist, obj.pos, origin)
+            # Calculates projection of "originDist" over the line
+            proj = vec3.dot(originDist, dir)
+
+            if proj < length and proj > 0.0
+                # Calculates distance beetwen a line and a point
+                cross = []
+                vec3.cross(cross, dir, originDist)
+                len1 = vec3.len(cross)
+                len2 = vec3.len(dir)
+                dist = len1/len2
+
+                if dist < obj.radius
+                    if proj < minProj
+                        caughtObj = obj
+                        minProj = proj
+        caughtObj
 
     @distFromStraight = (origin, dir, obj) ->
         sub = []
@@ -118,7 +132,7 @@ class window.Collision
 
 
 
-
+# Class that represents a rectangle
 class Quad
     (x, y, w, h) ->
         @x = x
@@ -135,7 +149,7 @@ class Quad
             true
         else
             false
-
+# Class that represents a quad-tree
 class QuadTree
     (objs, quad, level = 0) ->
         @objs = []

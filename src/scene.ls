@@ -2,13 +2,11 @@ class window.Scene
     (gl) ->
         @gl = gl
         @objects = new LinkedList!
-            #@objects.add new Explosion gl, [ 8.0, 0.0,-6.0]
+        @objects.add new Explosion gl, [ 8.0, 0.0,-6.0]
         @objects.add new Xaropinho gl, [-6.0, 1.0,-6.0]
         @objects.add new Xaropinho gl, [ 6.0, 1.0,-6.0]
         @objects.add new Xaropinho gl, [ 6.0, 1.0, 6.0]
         @objects.add new Xaropinho gl, [-8.0, 1.0,-6.0]
-        #@objects.add new Xaropinho gl, [ 6.0, 0.0,-6.0]
-        #@objects.add new Xaropinho gl, [ 6.0, 0.0, 6.0]
 
         @cenario = new Cenario gl
 
