@@ -35,11 +35,11 @@
         this.vel = [0, 0, 0];
         this.playAnim("Hurt");
         if (this.wait("hurt_time", 100)) {
-          if (this.health <= 0) {
-            return this.state = "Dead";
-          } else {
-            return this.state = "Seek";
-          }
+          this.state = "Seek";
+        }
+        if (this.health <= 0) {
+          AudioManager.playSound("rapaiz.mp3");
+          return this.state = "Dead";
         }
         break;
       case "Seek":
@@ -73,7 +73,6 @@
         break;
       case "Dead":
         this.vel = [0, 0, 0];
-        AudioManager.playSound("rapaiz.mp3");
         if (this.wait("garbage", 500)) {
           return this.trash = true;
         }

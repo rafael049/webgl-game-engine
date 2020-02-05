@@ -3,8 +3,12 @@ class window.Text
         @pos = pos
         @value = value
 
-        @texElement = document.getElementById "text"
+        overlayElement = document.getElementById "overlay"
+
+        @texElement = document.createElement "SPAN"
         @node = document.createTextNode @value
+
+        overlayElement.appendChild @texElement
 
         @texElement.appendChild @node
         @texElement.style.position = "absolute"

@@ -37,10 +37,11 @@ class window.Xaropinho extends Enemy
             @playAnim "Hurt"
 
             if @wait "hurt_time", 100
-                if @health <= 0
-                    @state = "Dead"
-                else
-                    @state = "Seek"
+                @state = "Seek"
+
+            if @health <= 0
+                AudioManager.playSound "rapaiz.mp3"
+                @state = "Dead"
         case "Seek"
             playerPos = Message.get "playerPosition"
             player = Message.get "playerRef"
@@ -80,6 +81,5 @@ class window.Xaropinho extends Enemy
 
         case "Dead"
             @vel = [0, 0, 0]
-            AudioManager.playSound "rapaiz.mp3"
             if @wait "garbage", 500
                 @trash = true

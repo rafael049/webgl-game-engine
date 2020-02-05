@@ -29,6 +29,7 @@
     WeaponHud.prototype.update = function(){
       var currentWeapon, cameraPos, cameraDir, obj;
       currentWeapon = this.weapons[this.currentWeapon];
+      this.pos = currentWeapon.sprite.pos;
       if (Input.onKeydown(70)) {
         currentWeapon.sprite.playAnim("Shot", false);
         AudioManager.playSound(currentWeapon.sound);
@@ -36,7 +37,6 @@
         cameraDir = Message.get("cameraFrontVec");
         if (currentWeapon.type === "fire") {
           obj = Collision.raycast(cameraPos, cameraDir, 100.0);
-          console.log(obj);
           if (obj) {
             obj.state = "Hurt";
             obj.health -= 5.0;

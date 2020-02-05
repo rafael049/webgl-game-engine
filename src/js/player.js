@@ -33,12 +33,17 @@
           }
         }
         break;
-      case "Dead":
+      case "Dying":
         this.dead = true;
         this.camera.deadView();
         if (this.wait("risada_delay", 2000)) {
+          console.log("playAudio");
           AudioManager.playSound("peludao.opus");
+          this.state = "Die";
         }
+        break;
+      case "Die":
+        this.health = 0;
       }
       return this.sendMessages();
     };
@@ -72,11 +77,12 @@
       vec3.normalize(this.dir, this.dir);
     };
     Player.prototype.damage = function(value){
-      this.health -= value;
-      HUD.damageScreen.style.opacity = 0.25;
-      this.takingDamage = true;
-      if (this.health < 0) {
-        return this.state = "Dead";
+      if (this.health <= 0 && !this.dead) {
+        return this.state = "Dying";
+      } else {
+        this.health -= value;
+        HUD.damageScreen.style.opacity = 0.25;
+        return this.takingDamage = true;
       }
     };
     Player.prototype.sendMessages = function(){
@@ -84,8 +90,9 @@
       Message.send("playerRef", this);
       return Message.send("isPlayerDead", this.dead);
     };
-    Player.prototype.wait = function(name, time){
+    Player.prototype.wait = function(name, time, once){
       var now, end;
+      once == null && (once = false);
       now = Date.now();
       end = now + time;
       if (this.timers[name]) {

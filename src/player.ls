@@ -31,11 +31,15 @@ class window.Player
                 else
                     HUD.damageScreen.style.opacity = 0.0
 
-        case "Dead"
+        case "Dying"
             @dead = true
             @camera.deadView!
             if @wait "risada_delay", 2000
+                console.log "playAudio"
                 AudioManager.playSound "peludao.opus"
+                @state = "Die"
+        case "Die"
+            @health = 0
 
         @sendMessages!
 
@@ -66,19 +70,22 @@ class window.Player
             @dir[0] += -1
 
         vec3.normalize @dir, @dir
+
     damage: (value) ->
-        @health -= value
-        HUD.damageScreen.style.opacity = 0.25
-        @takingDamage = true
-        if @health < 0
-            @state = "Dead"
+
+        if @health <= 0 and not @dead
+            @state = "Dying"
+        else
+            @health -= value
+            HUD.damageScreen.style.opacity = 0.25
+            @takingDamage = true
 
     sendMessages: ->
         Message.send "playerPosition", @pos
         Message.send "playerRef", this
         Message.send "isPlayerDead", @dead
 
-    wait: (name, time) ->
+    wait: (name, time, once=false) ->
         now = Date.now!
         end = now + time
 

@@ -20,6 +20,7 @@ class window.WeaponHud
 
     update: ->
         currentWeapon = @weapons[@currentWeapon]
+        @pos = currentWeapon.sprite.pos
 
         if Input.onKeydown(70)
             currentWeapon.sprite.playAnim "Shot", false
@@ -29,7 +30,6 @@ class window.WeaponHud
             cameraDir = Message.get "cameraFrontVec"
             if currentWeapon.type == "fire"
                 obj = Collision.raycast cameraPos, cameraDir, 100.0
-                console.log obj
                 if obj
                     obj.state = "Hurt"
                     obj.health -= 5.0

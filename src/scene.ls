@@ -4,16 +4,15 @@ class window.Scene
         @objects = new LinkedList!
         @objects.add new Explosion gl, [ 8.0, 0.0,-6.0]
         @objects.add new Xaropinho gl, [-6.0, 1.0,-6.0]
-        @objects.add new Xaropinho gl, [ 6.0, 1.0,-6.0]
+        #@objects.add new Xaropinho gl, [ 6.0, 1.0,-6.0]
         @objects.add new Xaropinho gl, [ 6.0, 1.0, 6.0]
-        @objects.add new Xaropinho gl, [-8.0, 1.0,-6.0]
+        #@objects.add new Xaropinho gl, [-8.0, 1.0,-6.0]
 
         @cenario = new Cenario gl
 
         @player = new Player gl, [0.0, 1.0, 0.0]
 
         @input = new Input
-        @audio = new AudioManager
         @skybox = new Skybox @gl
 
         @hud = new HUD gl

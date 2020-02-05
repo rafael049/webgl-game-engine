@@ -5,13 +5,16 @@
     Text.displayName = 'Text';
     var prototype = Text.prototype, constructor = Text;
     function Text(value, font, pos, size, color, shadow, width){
+      var overlayElement;
       color == null && (color = "#ffffff");
       shadow == null && (shadow = false);
-      width == null && (width = 2048);
+      width == null && (width = 400);
       this.pos = pos;
       this.value = value;
-      this.texElement = document.getElementById("text");
+      overlayElement = document.getElementById("overlay");
+      this.texElement = document.createElement("SPAN");
       this.node = document.createTextNode(this.value);
+      overlayElement.appendChild(this.texElement);
       this.texElement.appendChild(this.node);
       this.texElement.style.position = "absolute";
       this.texElement.style.width = width + "px";
