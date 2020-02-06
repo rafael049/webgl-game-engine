@@ -12,14 +12,14 @@
           sound: "tiro.mp3",
           type: "fire",
           firerate: 1.0,
-          damage: 1.0
+          damage: 2.0
         },
         cacetete: {
           sprite: new CaceteteSprite(gl),
           sound: "batSwing.mp3",
           type: "meelee",
           firerate: 1.0,
-          damage: 1.0
+          damage: 5.0
         }
       };
     }
@@ -38,15 +38,15 @@
         if (currentWeapon.type === "fire") {
           obj = Collision.raycast(cameraPos, cameraDir, 100.0);
           if (obj) {
-            obj.state = "Hurt";
-            obj.health -= 5.0;
+            obj.doDamage(currentWeapon.damage);
           }
         } else if (currentWeapon.type === "meelee") {
           obj = Collision.raycast(cameraPos, cameraDir, 4.0);
           if (obj) {
-            obj.state = "Hurt";
-            obj.health -= 5.0;
+            obj.doDamage(currentWeapon.damage);
           }
+        } else if (currentWeapon.type === "") {
+          console.log("TODO");
         }
       }
       if (Input.onKeydown(49)) {

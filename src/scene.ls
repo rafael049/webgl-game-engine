@@ -4,9 +4,9 @@ class window.Scene
         @objects = new LinkedList!
         @objects.add new Explosion gl, [ 8.0, 0.0,-6.0]
         @objects.add new Xaropinho gl, [-6.0, 1.0,-6.0]
-        #@objects.add new Xaropinho gl, [ 6.0, 1.0,-6.0]
+        @objects.add new Xaropinho gl, [ 6.0, 1.0,-6.0]
         @objects.add new Xaropinho gl, [ 6.0, 1.0, 6.0]
-        #@objects.add new Xaropinho gl, [-8.0, 1.0,-6.0]
+        @objects.add new Xaropinho gl, [-8.0, 1.0,-6.0]
 
         @cenario = new Cenario gl
 
@@ -44,7 +44,11 @@ class window.Scene
 
     update: !->
 
+        # Update player
         @player.update 1.0
+
+        # Update Score
+        Score.update!
 
         # Get current vel and pos from objs and check collision
         # @ Update Collision system to use linked list

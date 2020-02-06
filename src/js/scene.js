@@ -9,7 +9,9 @@
       this.objects = new LinkedList();
       this.objects.add(new Explosion(gl, [8.0, 0.0, -6.0]));
       this.objects.add(new Xaropinho(gl, [-6.0, 1.0, -6.0]));
+      this.objects.add(new Xaropinho(gl, [6.0, 1.0, -6.0]));
       this.objects.add(new Xaropinho(gl, [6.0, 1.0, 6.0]));
+      this.objects.add(new Xaropinho(gl, [-8.0, 1.0, -6.0]));
       this.cenario = new Cenario(gl);
       this.player = new Player(gl, [0.0, 1.0, 0.0]);
       this.input = new Input;
@@ -35,6 +37,7 @@
     Scene.prototype.update = function(){
       var current;
       this.player.update(1.0);
+      Score.update();
       Collision.check(this.objects.toArray(), this.player);
       current = this.objects.head;
       while (current !== null) {

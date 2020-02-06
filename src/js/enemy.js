@@ -15,10 +15,17 @@
       this.state = "Iddle";
       this.timers = [];
       this.health = 10.0;
+      this.dead = false;
     }
     Enemy.prototype.update = function(){
       this.lookAtCamera();
       return vec3.add(this.pos, this.pos, this.vel);
+    };
+    Enemy.prototype.doDamage = function(value){
+      if (!this.dead) {
+        this.health -= value;
+        return this.state = "Hurt";
+      }
     };
     Enemy.prototype.wait = function(name, time){
       var now, end;

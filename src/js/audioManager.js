@@ -12,7 +12,6 @@
     }
     AudioManager.playSound = function(name){
       var sound;
-      console.log(constructor.audioBuffers);
       sound = new Sound(constructor.ctx, constructor.audioBuffers.buffers[name]);
       return sound.play();
     };
@@ -40,11 +39,8 @@
       request.responseType = 'arraybuffer';
       thisBuffer = this;
       request.onload = function(){
-        console.log("loading");
-        console.log(thisBuffer.ctx);
         thisBuffer.ctx.decodeAudioData(request.response, function(buffer){
-          thisBuffer.buffers[filename] = buffer;
-          return console.log("loaded");
+          return thisBuffer.buffers[filename] = buffer;
         });
       };
       return request.send();

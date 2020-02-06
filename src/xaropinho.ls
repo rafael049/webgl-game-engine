@@ -19,6 +19,9 @@ class window.Xaropinho extends Enemy
         # Initial state
         @state = "Idle"
 
+        # Score Value
+        @value = 100
+
     update: ->
         super!
 
@@ -32,6 +35,7 @@ class window.Xaropinho extends Enemy
             vec3.sub(dist, playerPos, @pos)
             if vec3.len(dist) < 10.0
                 @state = "Seek"
+
         case "Hurt"
             @vel = [0, 0, 0]
             @playAnim "Hurt"
@@ -39,9 +43,12 @@ class window.Xaropinho extends Enemy
             if @wait "hurt_time", 100
                 @state = "Seek"
 
-            if @health <= 0
+            if @health <= 0 and (not @dead)
                 AudioManager.playSound "rapaiz.mp3"
+                Score.add @value
                 @state = "Dead"
+                @dead = true
+
         case "Seek"
             playerPos = Message.get "playerPosition"
             player = Message.get "playerRef"

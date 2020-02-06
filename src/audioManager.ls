@@ -8,7 +8,6 @@ class window.AudioManager
 
 
     @playSound = (name) ->
-        console.log @@audioBuffers
         sound = new Sound @@ctx, @@audioBuffers.buffers[name]
         sound.play!
 
@@ -35,11 +34,8 @@ class Buffer
         request.responseType = 'arraybuffer'
         thisBuffer = this
         request.onload = ! ->
-            console.log "loading"
-            console.log thisBuffer.ctx
             thisBuffer.ctx.decodeAudioData(request.response, (buffer) ->
                 thisBuffer.buffers[filename] = buffer
-                console.log "loaded"
             )
         request.send!
 

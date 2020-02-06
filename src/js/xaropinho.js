@@ -16,6 +16,7 @@
       this.anim.anims["Attack"] = [2, 4];
       this.anim.curAnim = "Idle";
       this.state = "Idle";
+      this.value = 100;
     }
     Xaropinho.prototype.update = function(){
       var playerPos, dist, player, vel;
@@ -37,9 +38,11 @@
         if (this.wait("hurt_time", 100)) {
           this.state = "Seek";
         }
-        if (this.health <= 0) {
+        if (this.health <= 0 && !this.dead) {
           AudioManager.playSound("rapaiz.mp3");
-          return this.state = "Dead";
+          Score.add(this.value);
+          this.state = "Dead";
+          return this.dead = true;
         }
         break;
       case "Seek":

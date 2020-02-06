@@ -21,27 +21,30 @@
       this.weapon = new WeaponHud(gl);
       this.manchete = new Text("MASCOTES ATACAM APRESENTADOR, MAS ELE TA LOUCO DE DROGA", "Arial", [70, 635], 32, "#ffffff", true, 650);
       this.health = new Text("VIDA:", "Arial", [60, 600], 25, "#ffffff", true, 200);
+      this.score = new Text("IBOPE:", "Arial", [60, 50], 30, "#ffffff", true, 200);
     }
     HUD.prototype.render = function(){
-      var orthoProjectionMatrix, player;
+      var orthoProjectionMatrix;
       orthoProjectionMatrix = mat4.create();
       mat4.ortho(orthoProjectionMatrix, -2.0, 2.0, -2.0, 2.0, 0.1, 5.0);
       if (!Message.get("isPlayerDead")) {
-        this.weapon.render(orthoProjectionMatrix);
+        return this.weapon.render(orthoProjectionMatrix);
       } else {
         constructor.damageScreen.style.opacity = 0.25;
-        this.manchete.setText("O CARA MORREU MANO KKKKKKKJJKKK KKKKKKKKKK");
+        return this.manchete.setText("O CARA MORREU MANO KKKKKKKJJKKK KKKKKKKKKK");
       }
+    };
+    HUD.prototype.update = function(){
+      var player;
+      this.weapon.update();
       player = Message.get("playerRef");
       if (player) {
         this.health.setText("VIDA: " + player.health);
         if (vec3.len(player.vel) > 0.1) {
-          return this.weapon.pos[1] = 0.03 * Math.sin(Date.now() / 120) - 1.1;
+          this.weapon.pos[1] = 0.03 * Math.sin(Date.now() / 120) - 1.1;
         }
       }
-    };
-    HUD.prototype.update = function(){
-      return this.weapon.update();
+      return this.score.setText("IBOPE: " + Score.score);
     };
     return HUD;
   }());
