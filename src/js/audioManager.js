@@ -23,7 +23,7 @@
     function Buffer(ctx, path){
       var i$, ref$, len$;
       this.ctx = ctx;
-      this.paths = ["rapaiz.mp3", "tiro.mp3", "batSwing.mp3", "irra.mp3", "peludao.opus"];
+      this.paths = ["rapaiz.mp3", "tiro.mp3", "batSwing.mp3", "irra.mp3", "peludao.opus", "ratinho.mp3", "esse_e_meu_patrao.mp3", "uepa.mp3", "va_com_deus.opus", "aow_potencia.m4a", "cavalo.m4a", "jesus.m4a", "calma.m4a", "ai.m4a", "danca_gatinho.m4a"];
       this.buffers = {};
       this.ready = false;
       for (i$ = 0, len$ = (ref$ = this.paths).length; i$ < len$; ++i$) {
@@ -56,7 +56,7 @@
     }
     Sound.prototype.init = function(){
       this.gainNode = this.ctx.createGain();
-      this.gainNode.gain.value = 0.1;
+      this.gainNode.gain.value = 0.8;
       this.source = this.ctx.createBufferSource();
       this.source.buffer = this.buffer;
       this.source.connect(this.gainNode);

@@ -42,6 +42,10 @@
       if (Input.keys[72]) {
         this.yaw -= this.sensivity;
       }
+      if (!Input.keys[16]) {
+        this.pitch -= Input.mouseMove[1] * this.sensivity / 20;
+        this.yaw += Input.mouseMove[0] * this.sensivity / 20;
+      }
       if (!this.parent) {
         if (Input.keys[87]) {
           vec3.add(this.pos, this.pos, vec3.scale([], this.front, this.movSpeed));
@@ -89,13 +93,10 @@
       return projectionMatrix;
     };
     Camera.prototype.deadView = function(){
-      var damageScreen;
       if (this.pitch < 45) {
         this.pitch += (46 - this.pitch) / 25;
         this.pos[1] -= 0.02;
       }
-      damageScreen = document.getElementById("damageScreen");
-      damageScreen.opacity = 0.25;
     };
     return Camera;
   }());

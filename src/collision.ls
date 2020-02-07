@@ -9,8 +9,8 @@ class window.Collision
         player.collidingWith = []
         @checkBounds player
 
-        for obj in objs
-            @checkBounds obj
+        #for obj in objs
+        #    @checkBounds obj
 
         quad = new Quad(-X_BOUNDS, -Y_BOUNDS, 2*X_BOUNDS, 2*Y_BOUNDS)
         quadTree = new QuadTree objs.concat(player), quad
@@ -68,13 +68,13 @@ class window.Collision
         x2 = obj2.pos[0] + obj2.vel[0]
         y2 = obj2.pos[2] + obj2.vel[2]
 
-        if Math.sqrt( (x1 - x2)^2 + (y1 - y2)^2 ) < (obj1.radius + obj2.radius)
+        if Math.sqrt( (x1 - x2)^2 + (y1 - y2)^2 ) <= (obj1.radius + obj2.radius)
             normal = vec3.create!
             vec3.sub(normal, obj2.pos, obj1.pos) # vetor do obj1 para obj2
             vec3.normalize(normal, normal)
 
-            dot1 = vec3.dot(obj1.vel, normal)
-            dot2 = vec3.dot(obj2.vel, normal)
+            dot1 = Math.abs vec3.dot(obj1.vel, normal)
+            dot2 = Math.abs vec3.dot(obj2.vel, normal)
 
             cancelVel1 = []
             vec3.scale(cancelVel1, normal, dot1)
@@ -82,9 +82,7 @@ class window.Collision
             vec3.scale(cancelVel2, normal, dot2)
 
             vec3.sub(obj1.pos, obj1.pos, cancelVel1)
-            vec3.sub(obj2.pos, obj2.pos, cancelVel2)
-
-
+            vec3.add(obj2.pos, obj2.pos, cancelVel2)
 
     @getTreeElements = (quadTree) ->
         if not quadTree

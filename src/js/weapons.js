@@ -12,7 +12,7 @@
           sound: "tiro.mp3",
           type: "fire",
           firerate: 1.0,
-          damage: 2.0
+          damage: 20.0
         },
         cacetete: {
           sprite: new CaceteteSprite(gl),

@@ -20,6 +20,16 @@ class Buffer
             , "batSwing.mp3"
             , "irra.mp3"
             , "peludao.opus"
+            , "ratinho.mp3"
+            , "esse_e_meu_patrao.mp3"
+            , "uepa.mp3"
+            , "va_com_deus.opus"
+            , "aow_potencia.m4a"
+            , "cavalo.m4a"
+            , "jesus.m4a"
+            , "calma.m4a"
+            , "ai.m4a"
+            , "danca_gatinho.m4a"
             ]
         @buffers = {}
         @ready = false
@@ -46,7 +56,7 @@ class Sound
 
     init: ->
         @gainNode = @ctx.createGain!
-        @gainNode.gain.value = 0.1
+        @gainNode.gain.value = 0.8
         @source = @ctx.createBufferSource!
         @source.buffer = @buffer
         @source.connect @gainNode

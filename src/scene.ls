@@ -2,11 +2,13 @@ class window.Scene
     (gl) ->
         @gl = gl
         @objects = new LinkedList!
+
         @objects.add new Explosion gl, [ 8.0, 0.0,-6.0]
-        @objects.add new Xaropinho gl, [-6.0, 1.0,-6.0]
-        @objects.add new Xaropinho gl, [ 6.0, 1.0,-6.0]
-        @objects.add new Xaropinho gl, [ 6.0, 1.0, 6.0]
-        @objects.add new Xaropinho gl, [-8.0, 1.0,-6.0]
+        #@objects.add new Xaropinho gl, [-6.0, 1.0,-6.0]
+        #@objects.add new Xaropinho gl, [ 6.0, 1.0,-6.0]
+        #@objects.add new Xaropinho gl, [ 6.0, 1.0, 6.0]
+        #@objects.add new Xaropinho gl, [-8.0, 1.0,-6.0]
+        #@objects.add new Xaropinho gl, [ 8.0, 1.0, 6.0]
 
         @cenario = new Cenario gl
 
@@ -22,6 +24,9 @@ class window.Scene
 
         @gl.enable @gl.DEPTH_TEST
         @gl.depthFunc @gl.LEQUAL
+
+        #Initial sound
+        AudioManager.playSound "danca_gatinho.m4a"
 
     render: !->
         @gl.clear (@gl.COLOR_BUFFER_BIT .|. @gl.DEPTH_BUFFER_BIT)
@@ -49,6 +54,9 @@ class window.Scene
 
         # Update Score
         Score.update!
+
+        # Update Input
+        @input.update!
 
         # Get current vel and pos from objs and check collision
         # @ Update Collision system to use linked list

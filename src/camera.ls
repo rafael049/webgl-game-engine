@@ -30,14 +30,18 @@ class window.Camera
         if @parent
             vec3.add(@pos, @parent.pos, @offset)
 
-        if Input.keys[75]
+        if Input.keys[75] # k
             @pitch += @sensivity
-        if Input.keys[74]
+        if Input.keys[74] # j
             @pitch -= @sensivity
-        if Input.keys[76]
+        if Input.keys[76] # l
             @yaw += @sensivity
-        if Input.keys[72]
+        if Input.keys[72] # h
             @yaw -= @sensivity
+
+        if not Input.keys[16] # shift
+            @pitch -= Input.mouseMove[1] * @sensivity / 20
+            @yaw   += Input.mouseMove[0] * @sensivity / 20
 
         if not @parent
             if Input.keys[87]

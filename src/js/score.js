@@ -5,25 +5,34 @@
     Score.displayName = 'Score';
     var prototype = Score.prototype, constructor = Score;
     Score.score = 1000;
-    Score.lastUpdateMoment = Date.now();
+    Score.lastUpdateMoment = 0;
     Score.combo = 0;
     Score.add = function(value){
       var timeInterval;
       timeInterval = Date.now() - constructor.lastUpdateMoment;
-      if (timeInterval < 5000) {
+      if (timeInterval < 2500) {
         constructor.combo += 1;
-        constructor.lastUpdateMoment = Date.now();
       } else {
         constructor.combo = 0;
       }
+      constructor.lastUpdateMoment = Date.now();
       switch (constructor.combo) {
       case 1:
         AudioManager.playSound("irra.mp3");
         break;
       case 2:
-        AudioManager.playSound("rapaiz_kisse.ogg");
+        AudioManager.playSound("jesus.m4a");
+        break;
+      case 3:
+        AudioManager.playSound("cavalo.m4a");
+        break;
+      case 4:
+        AudioManager.playSound("calma.m4a");
+        break;
+      case 5:
+        AudioManager.playSound("esse_e_meu_patrao.mp3");
       }
-      constructor.score += value;
+      constructor.score += value * (constructor.combo + 1);
       return console.log(constructor.combo);
     };
     Score.update = function(){

@@ -7,10 +7,18 @@
     Input.keys = [];
     Input._keys = [];
     Input.keysTap = [];
+    Input.mouseMove = [0.0, 0.0];
     function Input(){
       window.addEventListener('keydown', this.keydownCallback);
       window.addEventListener('keyup', this.keyupCallback);
+      window.addEventListener('mousemove', this.mouseCallback);
+      window.addEventListener('click', function(){
+        return document.body.requestPointerLock();
+      });
     }
+    Input.prototype.update = function(){
+      constructor.mouseMove = [0.0, 0.0];
+    };
     Input.prototype.keydownCallback = function(e){
       if (!e.repeat) {
         constructor._keys[e.keyCode] = true;
@@ -25,6 +33,10 @@
         constructor._keys[key] = false;
         return true;
       }
+    };
+    Input.prototype.mouseCallback = function(e){
+      constructor.mouseMove[0] = e.movementX;
+      return constructor.mouseMove[1] = e.movementY;
     };
     return Input;
   }());

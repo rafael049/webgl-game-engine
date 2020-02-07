@@ -8,6 +8,7 @@
     function Player(gl, pos){
       this.pos = pos;
       this.vel = [0.0, 0.0, 0.0];
+      this.linearVel = 0.0;
       this.dir = [0.0, 0.0, 0.0];
       this.radius = 1.0;
       this.height = 2.0;
@@ -17,8 +18,10 @@
       this.timers = [];
       this.health = 100;
       this.dead = false;
+      this.lastVel = this.vel;
     }
     Player.prototype.update = function(deltaTime){
+      var op;
       switch (this.state) {
       case "Normal":
         this.camera.update();
@@ -37,9 +40,15 @@
         this.dead = true;
         this.camera.deadView();
         if (this.wait("risada_delay", 2000)) {
-          console.log("playAudio");
-          AudioManager.playSound("peludao.opus");
           this.state = "Die";
+          op = Math.round(Math.random());
+          switch (op) {
+          case 0:
+            AudioManager.playSound("peludao.opus");
+            break;
+          case 1:
+            AudioManager.playSound("va_com_deus.opus");
+          }
         }
         break;
       case "Die":
@@ -48,7 +57,12 @@
       return this.sendMessages();
     };
     Player.prototype.updatePosition = function(){
-      vec3.add(this.pos, this.pos, this.vel);
+      var vel;
+      vel = [];
+      vec3.add(vel, this.vel, this.lastVel);
+      vec3.scale(vel, vel, 0.5);
+      vec3.add(this.pos, this.pos, vel);
+      this.lastVel = this.vel;
     };
     Player.prototype.calcVel = function(deltaTime){
       var front, right;
@@ -56,33 +70,47 @@
       right = vec3.clone(Message.get("cameraRightVec"));
       front[1] = 0.0;
       vec3.normalize(front, front);
-      vec3.scale(right, right, this.dir[0] * MAX_VEL * deltaTime);
-      vec3.scale(front, front, this.dir[2] * MAX_VEL * deltaTime);
+      vec3.scale(right, right, this.dir[0] * this.linearVel * deltaTime);
+      vec3.scale(front, front, this.dir[2] * this.linearVel * deltaTime);
       vec3.add(this.vel, front, right);
     };
     Player.prototype.readInput = function(){
       this.dir = [0.0, 0.0, 0.0];
       if (Input.keys[87]) {
         this.dir[2] += 1;
+        this.linearVel = MAX_VEL;
       }
       if (Input.keys[83]) {
         this.dir[2] += -1;
+        this.linearVel = MAX_VEL;
       }
       if (Input.keys[68]) {
         this.dir[0] += 1;
+        this.linearVel = MAX_VEL;
       }
       if (Input.keys[65]) {
         this.dir[0] += -1;
+        this.linearVel = MAX_VEL;
       }
       vec3.normalize(this.dir, this.dir);
     };
     Player.prototype.damage = function(value){
+      var op;
       if (this.health <= 0 && !this.dead) {
         return this.state = "Dying";
-      } else {
+      } else if (!this.dead) {
         this.health -= value;
         HUD.damageScreen.style.opacity = 0.25;
-        return this.takingDamage = true;
+        this.takingDamage = true;
+        op = Math.round(Math.random() * 1);
+        switch (op) {
+        case 0:
+          return AudioManager.playSound("ai.m4a");
+        case 1:
+          return AudioManager.playSound("uepa.mp3");
+        case 2:
+          return AudioManager.playSound("jesus.m4a");
+        }
       }
     };
     Player.prototype.sendMessages = function(){

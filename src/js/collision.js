@@ -8,14 +8,10 @@
     Y_BOUNDS = 15.0;
     Collision.objs = [];
     Collision.check = function(objs, player){
-      var i$, len$, obj, quad, quadTree;
+      var quad, quadTree;
       this.objs = objs;
       player.collidingWith = [];
       this.checkBounds(player);
-      for (i$ = 0, len$ = objs.length; i$ < len$; ++i$) {
-        obj = objs[i$];
-        this.checkBounds(obj);
-      }
       quad = new Quad(-X_BOUNDS, -Y_BOUNDS, 2 * X_BOUNDS, 2 * Y_BOUNDS);
       quadTree = new QuadTree(objs.concat(player), quad);
       return this.checkCollisionFromTree(quadTree);
@@ -70,18 +66,18 @@
       y1 = obj1.pos[2] + obj1.vel[2];
       x2 = obj2.pos[0] + obj2.vel[0];
       y2 = obj2.pos[2] + obj2.vel[2];
-      if (Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)) < obj1.radius + obj2.radius) {
+      if (Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)) <= obj1.radius + obj2.radius) {
         normal = vec3.create();
         vec3.sub(normal, obj2.pos, obj1.pos);
         vec3.normalize(normal, normal);
-        dot1 = vec3.dot(obj1.vel, normal);
-        dot2 = vec3.dot(obj2.vel, normal);
+        dot1 = Math.abs(vec3.dot(obj1.vel, normal));
+        dot2 = Math.abs(vec3.dot(obj2.vel, normal));
         cancelVel1 = [];
         vec3.scale(cancelVel1, normal, dot1);
         cancelVel2 = [];
         vec3.scale(cancelVel2, normal, dot2);
         vec3.sub(obj1.pos, obj1.pos, cancelVel1);
-        return vec3.sub(obj2.pos, obj2.pos, cancelVel2);
+        return vec3.add(obj2.pos, obj2.pos, cancelVel2);
       }
     };
     Collision.getTreeElements = function(quadTree){
